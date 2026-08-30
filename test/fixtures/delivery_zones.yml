@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  postal_code: MyString
+  delivery_fee_cents: 1
+  minimun_order_cents: 1
+  active: false
+
+two:
+  name: MyString
+  postal_code: MyString
+  delivery_fee_cents: 1
+  minimun_order_cents: 1
+  active: false

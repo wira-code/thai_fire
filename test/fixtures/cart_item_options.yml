@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cart_item: one
+  option_name: MyString
+  choice_name: MyString
+  price_cents: 1
+
+two:
+  cart_item: two
+  option_name: MyString
+  choice_name: MyString
+  price_cents: 1

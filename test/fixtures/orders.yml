@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  address: one
+  delivery_zone: one
+  order_number: MyString
+  order_type: 1
+  status: 1
+  payment_status: 1
+  subtotal_cents: 1
+  delivery_fee_cents: 1
+  total_cents: 1
+  scheduled_at: 2026-08-29 21:21:08
+  customer_note: MyText
+  delivery_address: MyText
+
+two:
+  user: two
+  address: two
+  delivery_zone: two
+  order_number: MyString
+  order_type: 1
+  status: 1
+  payment_status: 1
+  subtotal_cents: 1
+  delivery_fee_cents: 1
+  total_cents: 1
+  scheduled_at: 2026-08-29 21:21:08
+  customer_note: MyText
+  delivery_address: MyText

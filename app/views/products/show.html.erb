@@ -1,0 +1,71 @@
+<h1>Products#show</h1>
+<p>Find me in app/views/products/show.html.erb</p>
+<div class="container my-4">
+  <%= link_to "← กลับหน้าสินค้า", products_path, class: "btn btn-link mb-3 text-decoration-none" %>
+
+  <div class="row">
+    <div class="col-md-6">
+      <% if @product.image_url.present? %>
+        <img src="<%= @product.image_url %>" class="img-fluid rounded shadow" alt="<%= @product.name %>">
+      <% else %>
+        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 350px;">
+          <span class="text-muted">ไม่มีรูปภาพ</span>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-md-6">
+      <h2><%= @product.name %></h2>
+      <h3 class="text-primary mb-3">฿<%= sprintf('%.2f', @product.price_cents / 100.0) %></h3>
+      <p class="text-muted"><%= @product.description %></p>
+
+      <hr>
+
+      <!-- ฟอร์มเตรียมกดใส่ตะกร้า ( CartItem ) -->
+      <%= form_with url: "#", method: :post do |f| %>
+
+        <!-- Render Options (ถ้ามี) -->
+        <% if @options.any? %>
+          <div class="mb-3">
+            <h5 class="fw-bold">ตัวเลือก</h5>
+            <% @options.each do |option| %>
+              <div class="mb-2">
+                <label class="form-label font-semibold"><%= option.name %></label>
+                <% option.option_choices.each do |choice| %>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="options[<%= option.id %>]" id="choice_<%= choice.id %>" value="<%= choice.id %>">
+                    <label class="form-check-label" for="choice_<%= choice.id %>">
+                      <%= choice.name %>
+                      <% if choice.price_cents > 0 %>
+                        (+฿<%= sprintf('%.2f', choice.price_cents / 100.0) %>)
+                      <% end %>
+                    </label>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <!-- Render Add-ons (ถ้ามี) -->
+        <% if @add_ons.any? %>
+          <div class="mb-3">
+            <h5 class="fw-bold">ท็อปปิ้งเพิ่มเติม</h5>
+            <% @add_ons.each do |add_on| %>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="add_ons[]" id="addon_<%= add_on.id %>" value="<%= add_on.id %>">
+                <label class="form-check-label" for="addon_<%= add_on.id %>">
+                  <%= add_on.name %> (+฿<%= sprintf('%.2f', add_on.price_cents / 100.0) %>)
+                </label>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-primary btn-lg">เพิ่มลงตะกร้า</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

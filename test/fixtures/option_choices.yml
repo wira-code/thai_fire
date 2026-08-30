@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  option: one
+  name: MyString
+  price_cents: 1
+  position: 1
+
+two:
+  option: two
+  name: MyString
+  price_cents: 1
+  position: 1
