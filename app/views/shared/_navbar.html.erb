@@ -1,74 +1,59 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-secondary-subtle border-bottom sticky-top py-1">
   <div class="container-fluid px-4">
-    <!-- 1. โลโก้แบรนด์ทางซ้าย -->
-    <%= link_to root_path, class: "navbar-brand d-flex align-items-center me-4" do %>
-      <div class="text-center">
-        <div class="bg-danger text-white fw-bold px-2 py-1 rounded-top small">LOGO</div>
-        <span class="fw-bold text-dark tracking-wider d-block" style="font-size: 1.1rem; line-height: 1.1;">STORE NAME</span>
-      </div>
+
+    <!-- 1. LOGO ทางซ้าย -->
+    <%= link_to root_path, class: "navbar-brand d-flex align-items-center me-4 text-decoration-none" do %>
+    <%= image_tag "logo.jpeg", alt: "Thai Fire Logo", class: "img-fluid rounded-4 shadow-sm", style: "height: 70px; width: auto object-fit: cover;" %>
+
     <% end %>
 
-    <!-- ปุ่ม Hamburger สำหรับ Mobile -->
+    <!-- ปุ่ม Hamburger บนมือถือ -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- 2. เมนูตรงกลาง -->
+    <!-- 2. เมนูตรงกลาง (สไตล์ภาพที่ 2) -->
     <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2 align-items-center text-nowrap">
         <li class="nav-item">
-          <%= link_to "HOME", root_path, class: "nav-link px-3 fw-bold #{'active text-white bg-danger rounded' if current_page?(root_path)}" %>
+          <%= link_to "HOME", root_path, class: "nav-link px-3 fw-bold text-white bg-danger rounded-0 #{'active' if current_page?(root_path)}", style: "background-color: #b81c24 !important;" %>
         </li>
-        <li class="nav-item">
-          <%= link_to "MENU", products_path, class: "nav-link px-3 fw-bold #{'active text-white bg-danger rounded' if current_page?(products_path)}" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "ABOUT", "#", class: "nav-link px-3 fw-bold text-dark" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "OUR BRANCH", "#", class: "nav-link px-3 fw-bold text-dark" %>
-        </li>
+        <% Category.where(active: true).order(:position).each do |category| %>
+          <li class="nav-item">
+            <%= link_to category.name.upcase, category_path(category), class: "nav-link px-3 fw-bold text-nowrap #{'active' if current_page?(category_path(category))}" %>
+          </li>
+        <% end %>
         <li class="nav-item">
           <%= link_to "CONTACT", "#", class: "nav-link px-3 fw-bold text-dark" %>
         </li>
       </ul>
 
-      <!-- 3. ส่วนทางขวา (ตะกร้าสินค้า, ปุ่ม Login/User, ปุ่ม Action) -->
-      <div class="d-flex align-items-center gap-3">
-        <!-- ไอคอนตะกร้าสินค้า ( Cart ) -->
-        <%= link_to cart_path, class: "btn btn-outline-dark position-relative rounded-pill px-3" do %>
-          🛒 ตะกร้า
-          <% if current_cart.cart_items.any? %>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              <%= current_cart.cart_items.sum(:quantity) %>
-            </span>
-          <% end %>
+      <!-- 3. ปุ่มขวาสุด (ปุ่ม RESERVE ขอบมนสีแดง) -->
+      <div class="d-flex align-items-center gap-2">
+        <!-- ปุ่ม Action ขวาสุดตามภาพที่ 2 -->
+        <%= link_to products_path, class: "btn btn-outline-danger fw-bold rounded-pill px-3 py-2 ms-2", style: "color: #b81c24; border-color: #b81c24;" do %>
+          📅 RESERVE
         <% end %>
 
-        <!-- เช็กสถานะ Devise Authentication -->
+        <!-- ปุ่ม ตะกร้าสินค้า -->
+<%= link_to cart_path, class: "btn btn-outline-danger rounded-pill" do %>
+  🛒 ตะกร้า <span class="badge bg-danger"><%= current_cart.cart_items.sum(:quantity) %></span>
+<% end %>
+<!--
+<a href="<%= cart_path %>" class="btn btn-outline-danger rounded-pill">
+  🛒 ตะกร้า <span class="badge bg-danger"><%= current_cart.cart_items.sum(:quantity) %></span>
+</a> -->
+
+
+        <!-- เช็กการ Sign in ของ Devise -->
         <% if user_signed_in? %>
-          <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
-              👤 <%= current_user.first_name.presence || current_user.email %>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><%= link_to "ประวัติการสั่งซื้อ", orders_path, class: "dropdown-item" %></li>
-              <li><%= link_to "แก้ไขข้อมูลส่วนตัว", edit_user_registration_path, class: "dropdown-item" %></li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <%= link_to "ออกจากระบบ", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item text-danger" %>
-              </li>
-            </ul>
-          </div>
+          <%= link_to "ออกจากระบบ", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-link text-muted text-decoration-none btn-sm" %>
         <% else %>
-          <%= link_to "เข้าสู่ระบบ", new_user_session_path, class: "btn btn-outline-secondary fw-bold rounded-pill px-3" %>
-        <% end %>
-
-        <!-- ปุ่ม Highlight หลักทางขวาสุด (เช่น สั่งอาหาร / จองโต๊ะ) -->
-        <%= link_to products_path, class: "btn btn-outline-danger fw-bold rounded-pill px-3 py-2" do %>
-          📅 ORDER NOW
+          <%= link_to "Log in", new_user_session_path, class: "btn btn-link text-muted text-decoration-none fw-bold text-dark btn-sm" %>
         <% end %>
       </div>
     </div>
+
   </div>
 </nav>

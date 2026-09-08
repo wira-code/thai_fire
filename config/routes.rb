@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  get "products/index"
-  get "products/show"
+  get "orders/index"
+  get "orders/show"
+  get "orders/new"
+  get "orders/create"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -20,6 +22,11 @@ Rails.application.routes.draw do
   # root to: "devise/sessions#new"
   # ตั้งค่าให้เข้า 127.0.0.1:3000 แล้วเด้งไปหน้า index ของ Products ทันที
   # end
-  root to: "products#index"
-    resources :products, only: [ :index, :show ]
+  root to: "pages#home"
+
+  resources :products, only: [ :index, :show ]
+  resources :categories, only: [ :show ]
+  resource :cart, only: [ :show ]
+  resources :cart_items, only: [ :create, :update, :destroy ]
+  resources :orders, only: [ :index, :show, :new, :create ]
 end

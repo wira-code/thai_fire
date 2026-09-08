@@ -1,10 +1,10 @@
-<h1>Products#index</h1>
-<p>Find me in app/views/products/index.html.erb</p>
 
 <div class="container my-4">
+
+
   <!-- แถบเลือกหมวดหมู่สินค้า (Category Filter) -->
   <div class="d-flex gap-2 mb-4 overflow-auto pb-2">
-    <%= link_to "ทั้งหมด", products_path, class: "btn #{params[:category_id].blank? ? 'btn-primary' : 'btn-outline-primary'}" %>
+    <%= link_to "All", products_path, class: "btn #{params[:category_id].blank? ? 'btn-primary' : 'btn-outline-primary'}" %>
     <% @categories.each do |category| %>
       <%= link_to category.name, products_path(category_id: category.id),
                   class: "btn #{params[:category_id].to_i == category.id ? 'btn-primary' : 'btn-outline-primary'}" %>
@@ -20,7 +20,7 @@
             <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 200px; object-fit: cover;">
           <% else %>
             <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-              <span class="text-muted">ไม่มีรูปภาพ</span>
+              <span class="text-muted">No Photo</span>
             </div>
           <% end %>
 
@@ -30,12 +30,13 @@
 
             <div class="d-flex justify-content-between align-items-center mt-3">
               <span class="fw-bold fs-5 text-primary">
-                ฿<%= sprintf('%.2f', product.price_cents / 100.0) %>
+                €<%= sprintf('%.2f', product.price_cents / 100.0) %>
               </span>
-              <%= link_to "ดูรายละเอียด", product_path(product), class: "btn btn-outline-primary btn-sm" %>
+              <%= link_to "Details", product_path(product), class: "btn btn-outline-primary btn-sm" %>
             </div>
           </div>
         </div>
+
       </div>
     <% end %>
   </div>

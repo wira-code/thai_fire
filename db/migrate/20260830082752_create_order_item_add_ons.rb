@@ -5,7 +5,7 @@ class CreateOrderItemAddOns < ActiveRecord::Migration[8.1]
       t.references :add_on, null: false, foreign_key: true
       t.string :add_on_name, null: false
       t.integer :price_cents, null: false, default: 0
-      t.integer :quantity, null: false, default: 0
+      t.integer :quantity, null: false, default: 1
 
       t.timestamps
     end

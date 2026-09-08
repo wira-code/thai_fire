@@ -8,3 +8,22 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+/* ใส่ใน app/assets/stylesheets/application.css หรือคัสตอม CSS */
+@import "bootstrap";
+
+body {
+  background-color: #F4F4F2;
+}
+
+/* เพิ่มให้ Card อาหารดูมีมิติ และลอยโดดเด่นขึ้นมาจากพื้นหลัง */
+.card {
+  background-color: #FFFFFF;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}

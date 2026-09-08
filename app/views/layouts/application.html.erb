@@ -8,6 +8,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <!-- บรรทัดสำคัญ: ดึงไฟล์ CSS มาใช้งานในเว็บ -->
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
 
     <%= yield :head %>
 
@@ -21,6 +24,15 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <!-- 1. ดึง Bootstrap 5 CSS ผ่าน CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 2. ดึง Bootstrap JS (เพื่อให้เมนู Dropdown / Toggle บนมือถือกดได้) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
   </head>
 
   <body>
@@ -30,13 +42,13 @@
     <!-- Flash Messages แจ้งเตือน (Success / Alert) -->
     <div class="container mt-3">
       <% if notice %>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div data-controller="flash" class="alert alert-success alert-dismissible fade show" role="alert">
           <%= notice %>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <% end %>
       <% if alert %>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div data-controller="flash" class="alert alert-danger alert-dismissible fade show" role="alert">
           <%= alert %>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>

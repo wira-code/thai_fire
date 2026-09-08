@@ -1,0 +1,72 @@
+<div class="container my-5">
+  <!-- หัวข้อหมวดหมู่ -->
+  <div class="mb-4">
+    <h2 class="fw-bold text-dark"><%= @category.name %></h2>
+    <p class="text-muted"><%= @category.description %></p>
+  </div>
+
+  <!-- แสดง Grid สินค้า -->
+  <% if @products.any? %>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <% @products.each do |product| %>
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+            <div class="position-relative">
+            <!-- รูปภาพสินค้า -->
+            <% if product.image_url.present? %>
+              <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 220px; object-fit: cover;">
+            <% elsif product.respond_to?(:image) && product.image.attached? %>
+              <%= image_tag product.image, class: "card-img-top", style: "height: 220px; object-fit: cover;" %>
+            <% else %>
+              <div class="bg-light text-center py-5 text-muted">ไม่มีรูปภาพ</div>
+            <% end %>
+
+            <!-- 2. ป้าย Badge ลอยมุมขวาบนภาพ -->
+              <% if product.bestseller? %>
+                <span class="badge bg-danger position-absolute top-0 end-0 m-3 px-3 py-2 rounded-pill shadow-sm">
+                  Best Seller
+                </span>
+              <% elsif product.featured? %>
+                <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3 px-2 py-1 rounded-pill shadow-sm">
+                  Recommended
+                </span>
+              <% end %>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title fw-bold m-0"><%= product.name %></h5>
+                <!-- ป้ายแสดงสถานะ Bestseller / Featured -->
+                <% if product.bestseller? %>
+                  <span class="badge bg-danger">Best Seller</span>
+                <% elsif product.featured? %>
+                  <span class="badge bg-warning text-dark">Recommended</span>
+                <% end %>
+              </div>
+
+              <p class="card-text text-muted small flex-grow-1">
+                <%= truncate(product.description, length: 80) %>
+              </p>
+
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="fs-5 fw-bold text-danger">
+                  €<%= sprintf('%.2f', product.price_cents / 100.0) %>
+                </span>
+
+                <% if product.available? %>
+                  <%= link_to "Details", product_path(product), class: "btn btn-outline-dark btn-sm rounded-pill px-3 stretched-link" %>
+                <% else %>
+                  <span class="badge bg-secondary">Out of Stock</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="alert alert-light text-center py-5 border">
+      ยังไม่มีรายการอาหารในหมวดหมู่นี้
+    </div>
+  <% end %>
+</div>

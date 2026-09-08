@@ -1,69 +1,94 @@
-<h1>Products#show</h1>
-<p>Find me in app/views/products/show.html.erb</p>
-<div class="container my-4">
-  <%= link_to "← กลับหน้าสินค้า", products_path, class: "btn btn-link mb-3 text-decoration-none" %>
 
+
+<div class="container my-5">
+  <%= link_to :back, class: "link-dark text-decoration-none text-secondary d-inline-flex align-items-center mb-3 fw-semibold" do %>
+  <i class="fa-solid fa-arrow-left me-2"></i> <--- Back
+  <% end %>
+  <!--<%= link_to :back, class: "btn btn-outline-secondary mb-3 rounded-pill px-3" do %>
+  <i class="fa-solid fa-arrow-left me-1"></i> <--- Back
+  <% end %> -->
   <div class="row">
     <div class="col-md-6">
-      <% if @product.image_url.present? %>
-        <img src="<%= @product.image_url %>" class="img-fluid rounded shadow" alt="<%= @product.name %>">
-      <% else %>
-        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 350px;">
-          <span class="text-muted">ไม่มีรูปภาพ</span>
-        </div>
-      <% end %>
+      <img src="<%= @product.image_url %>" class="img-fluid rounded-3 shadow" alt="<%= @product.name %>">
     </div>
 
     <div class="col-md-6">
       <h2><%= @product.name %></h2>
-      <h3 class="text-primary mb-3">฿<%= sprintf('%.2f', @product.price_cents / 100.0) %></h3>
+      <h4 class="text-danger">€<%= sprintf('%.2f', @product.price_cents / 100.0) %></h4>
       <p class="text-muted"><%= @product.description %></p>
 
       <hr>
 
-      <!-- ฟอร์มเตรียมกดใส่ตะกร้า ( CartItem ) -->
-      <%= form_with url: "#", method: :post do |f| %>
+      <%= form_with url: cart_items_path, method: :post, local: true do |f| %>
+        <%= f.hidden_field :product_id, value: @product.id %>
 
-        <!-- Render Options (ถ้ามี) -->
-        <% if @options.any? %>
-          <div class="mb-3">
-            <h5 class="fw-bold">ตัวเลือก</h5>
-            <% @options.each do |option| %>
-              <div class="mb-2">
-                <label class="form-label font-semibold"><%= option.name %></label>
-                <% option.option_choices.each do |choice| %>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="options[<%= option.id %>]" id="choice_<%= choice.id %>" value="<%= choice.id %>">
-                    <label class="form-check-label" for="choice_<%= choice.id %>">
-                      <%= choice.name %>
-                      <% if choice.price_cents > 0 %>
-                        (+฿<%= sprintf('%.2f', choice.price_cents / 100.0) %>)
-                      <% end %>
-                    </label>
-                  </div>
+        <!-- 1. ส่วนเลือก Options (เช่น ชนิดเนื้อสัตว์, ระดับความเผ็ด) -->
+        <% @product.options.order(:position).each do |option| %>
+          <div class="mb-4">
+            <label class="form-label fw-bold">
+              <%= option.name %>
+              <% if option.required? %><span class="text-danger">*</span><% end %>
+            </label>
+
+            <% option.option_choices.order(:position).each do |choice| %>
+              <div class="form-check">
+                <% if option.multiple? %>
+                  <!-- ถ้าเลือกได้หลายอย่าง (Checkbox) -->
+                  <%= check_box_tag "option_choice_ids[]", choice.id, false, class: "form-check-input", id: "choice_#{choice.id}" %>
+                <% else %>
+                  <!-- ถ้าเลือกได้แค่อย่างเดียว (Radio Button) -->
+                  <%= radio_button_tag "options[#{option.id}]", choice.id, false, class: "form-check-input", id: "choice_#{choice.id}", required: option.required? %>
+                <% end %>
+
+                <%= label_tag "choice_#{choice.id}", class: "form-check-label d-flex justify-content-between" do %>
+                  <span><%= choice.name %></span>
+                  <% if choice.price_cents > 0 %>
+                    <span class="text-muted">+€<%= sprintf('%.2f', choice.price_cents / 100.0) %></span>
+                  <% end %>
                 <% end %>
               </div>
             <% end %>
           </div>
         <% end %>
 
-        <!-- Render Add-ons (ถ้ามี) -->
-        <% if @add_ons.any? %>
-          <div class="mb-3">
-            <h5 class="fw-bold">ท็อปปิ้งเพิ่มเติม</h5>
-            <% @add_ons.each do |add_on| %>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="add_ons[]" id="addon_<%= add_on.id %>" value="<%= add_on.id %>">
-                <label class="form-check-label" for="addon_<%= add_on.id %>">
-                  <%= add_on.name %> (+฿<%= sprintf('%.2f', add_on.price_cents / 100.0) %>)
-                </label>
-              </div>
-            <% end %>
+        <!-- 2. ส่วนเลือก Add-ons (พร้อมเลือกจำนวนชิ้น + เช็กสถานะ available) -->
+        <% if @product.add_ons.any? %>
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3">Un supplément ?</h5>
+            <div class="list-group list-group-flush border-top border-bottom">
+              <% @product.add_ons.each do |add_on| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center py-3 px-0 <%= 'opacity-50' unless add_on.available? %>">
+                  <div>
+                    <div class="fw-bold text-dark"><%= add_on.name %></div>
+                    <div class="small text-muted">+<%= sprintf('%.2f', add_on.price_cents / 100.0) %> €</div>
+                  </div>
+
+                  <div>
+                    <% if add_on.available? %>
+                      <!-- ตัวเลือกจำนวน Add-on (เริ่มต้นเป็น 0) -->
+                      <div class="d-flex align-items-center gap-2">
+                        <%= number_field_tag "add_ons[#{add_on.id}]", 0, min: 0, max: 10, class: "form-control text-center", style: "width: 70px;" %>
+                      </div>
+                    <% else %>
+                      <!-- แสดงเมื่อ Add-on หมด -->
+                      <span class="badge bg-light text-muted border fw-normal fs-6">Indisponible</span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
           </div>
         <% end %>
 
-        <div class="d-grid mt-4">
-          <button type="submit" class="btn btn-primary btn-lg">เพิ่มลงตะกร้า</button>
+        <!-- 3. คำสั่งพิเศษเพิ่มเติม (Special Request) -->
+        <div class="mb-3">
+          <%= f.label :special_request, "หมายเหตุเพิ่มเติมถึงห้องครัว", class: "form-label fw-bold" %>
+          <%= f.text_area :special_request, class: "form-control", rows: 2, placeholder: "เช่น ไม่ใส่ผักชี, ขอซอสเพิ่ม" %>
+        </div>
+
+        <div class="d-flex gap-3 align-items-center mt-4">
+          <%= f.number_field :quantity, value: 1, min: 1, class: "form-control w-25" %>
+          <%= f.submit "Add to cart", class: "btn btn-primary btn-lg flex-grow-1" %>
         </div>
       <% end %>
     </div>

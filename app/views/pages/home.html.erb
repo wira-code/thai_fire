@@ -1,0 +1,90 @@
+<!-- 1. Hero Banner Section (ภาพใหญ่ 1-2 ภาพ) -->
+<div class="position-relative overflow-hidden p-3 p-md-5 text-center bg-dark text-white mb-5"
+     style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200') center/cover no-repeat; min-height: 420px; display: flex; align-items: center; justify-content: center;">
+  <div class="col-md-8 p-lg-5 mx-auto my-5">
+    <h1 class="display-4 fw-bold">THAI FIRE</h1>
+    <p class="lead fw-normal mb-4">สัมผัสรสชาติอาหารไทยแท้ เผ็ดร้อน กลมกล่อม คัดสรรวัตถุดิบคุณภาพ</p>
+    <%= link_to "ดูเมนูทั้งหมด", products_path, class: "btn btn-danger btn-lg rounded-pill px-4" %>
+  </div>
+</div>
+
+<div class="container my-5">
+  <!-- 2. หมวดหมู่อาหาร (Quick Category Navigation) -->
+  <!-- <div class="text-center mb-5">
+    <h3 class="fw-bold mb-3">หมวดหมู่อาหาร</h3>
+    <div class="d-flex justify-content-center gap-2 flex-wrap">
+      <% @categories.each do |category| %>
+        <%= link_to category.name, category_path(category), class: "btn btn-outline-dark rounded-pill px-3" %>
+      <% end %>
+    </div>
+  </div> -->
+
+  <!-- Section 1: เมนูแนะนำ (Featured) -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold m-0">⭐ Recomended</h1>
+    <%= link_to "ดูทั้งหมด →", products_path, class: "text-decoration-none fw-bold text-danger" %>
+  </div>
+  <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    <% @featured_products.each do |product| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+          <% if product.image_url.present? %>
+            <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 220px; object-fit: cover;">
+          <% elsif product.respond_to?(:image) && product.image.attached? %>
+            <%= image_tag product.image, class: "card-img-top", style: "height: 220px; object-fit: cover;" %>
+          <% else %>
+            <div class="bg-light text-center py-5 text-muted">ไม่มีรูปภาพ</div>
+          <% end %>
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold"><%= product.name %></h5>
+            <p class="card-text text-muted small flex-grow-1">
+              <%= truncate(product.description, length: 80) %>
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="fs-5 fw-bold text-danger">
+                €<%= sprintf('%.2f', (product.respond_to?(:price_cents) ? product.price_cents / 100.0 : product.price)) %>
+              </span>
+              <%= link_to "Details", product_path(product), class: "btn btn-outline-dark btn-sm rounded-pill px-3" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold m-0">🔥 Best Seller</h1>
+    <%= link_to "ดูทั้งหมด →", products_path, class: "text-decoration-none fw-bold text-danger" %>
+  </div>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% @bestseller_products.each do |product| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+          <% if product.image_url.present? %>
+            <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 220px; object-fit: cover;">
+          <% elsif product.respond_to?(:image) && product.image.attached? %>
+            <%= image_tag product.image, class: "card-img-top", style: "height: 220px; object-fit: cover;" %>
+          <% else %>
+            <div class="bg-light text-center py-5 text-muted">ไม่มีรูปภาพ</div>
+          <% end %>
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold"><%= product.name %></h5>
+            <p class="card-text text-muted small flex-grow-1">
+              <%= truncate(product.description, length: 80) %>
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="fs-5 fw-bold text-danger">
+                €<%= sprintf('%.2f', (product.respond_to?(:price_cents) ? product.price_cents / 100.0 : product.price)) %>
+              </span>
+              <%= link_to "Details", product_path(product), class: "btn btn-outline-dark btn-sm rounded-pill px-3" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
