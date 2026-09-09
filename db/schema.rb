@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_06_141740) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_203850) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -174,19 +174,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_06_141740) do
   create_table "orders", force: :cascade do |t|
     t.bigint "address_id"
     t.datetime "created_at", null: false
+    t.string "customer_name"
     t.text "customer_note"
     t.text "delivery_address"
     t.integer "delivery_fee_cents", default: 0, null: false
+    t.datetime "delivery_time"
     t.bigint "delivery_zone_id"
+    t.string "email"
     t.string "order_number", null: false
     t.integer "order_type", default: 0, null: false
+    t.integer "payment_method", null: false, default: 0
     t.integer "payment_status", default: 0, null: false
+    t.string "phone_number"
     t.datetime "scheduled_at"
     t.integer "status", default: 0, null: false
     t.integer "subtotal_cents", default: 0, null: false
     t.integer "total_cents", default: 0, null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.index ["address_id"], name: "index_orders_on_address_id"
     t.index ["delivery_zone_id"], name: "index_orders_on_delivery_zone_id"
     t.index ["order_number"], name: "index_orders_on_order_number", unique: true
@@ -202,7 +207,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_06_141740) do
     t.datetime "created_at", null: false
     t.bigint "order_id", null: false
     t.datetime "paid_at"
-    t.integer "payment_method", null: false
+    t.integer "payment_method", null: false,  default: 0
     t.string "provider", null: false
     t.string "provider_payment_id"
     t.integer "status", default: 0, null: false

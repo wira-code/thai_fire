@@ -2,9 +2,9 @@ class Payment < ApplicationRecord
   belongs_to :order
 
   enum :payment_method, {
-    cash: 0,
-    card: 1,
-    online: 2
+    stripe: 0,
+    bank_transfer: 1,
+    cash_on_pickup: 2
   }, validate: true
 
   enum :status, {

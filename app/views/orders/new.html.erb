@@ -1,2 +1,80 @@
-<h1>Orders#new</h1>
-<p>Find me in app/views/orders/new.html.erb</p>
+ <div class="container-fluid px-lg-5">
+ <%= form_with model: @order, local: true do |f| %>
+  <div class="row">
+    <% unless user_signed_in? %>
+    <div class="col-lg-6 mb-4">
+      <div class="card p-3 mb-3 border-0 shadow-sm rounded-4 h-100">
+        <h5 class="fw-bold mb-3">ข้อมูลติดต่อสำหรับรับอาหาร</h5>
+
+        <div class="mb-3">
+          <%= f.label :customer_name, "ชื่อ-นามสกุล", class: "form-label" %>
+          <%= f.text_field :customer_name, class: "form-control", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :email, "อีเมล (สำหรับรับใบเสร็จ)", class: "form-label" %>
+          <%= f.email_field :email, class: "form-control", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :phone_number, "เบอร์โทรศัพท์", class: "form-label" %>
+          <%= f.telephone_field :phone_number, class: "form-control", required: true %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+  <!-- ฟิลด์ที่อยู่ / เวลา / หมายเหตุ เดิม -->
+  <%# 2. ฟิลด์ที่อยู่จัดส่ง / เวลา / หมายเหตุ %>
+    <div class="col-lg-6 mb-4">
+      <div class="card p-3 mb-3 border-0 shadow-sm rounded-4 h-100">
+        <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt-fill text-danger me-2"></i>รายละเอียดการจัดส่ง</h5>
+
+        <%# ที่อยู่จัดส่ง %>
+        <div class="mb-3">
+          <%= f.label :delivery_address, "ที่อยู่สำหรับจัดส่ง / เลขห้องพัก หรือชื่อโรงแรม", class: "form-label fw-semibold" %>
+          <%= f.text_area :delivery_address, rows: 2, class: "form-control rounded-3", placeholder: "ระบุที่อยู่จัดส่ง เลขที่บ้าน/ห้องพัก หรือชื่อโรงแรมอย่างชัดเจน", required: true %>
+        </div>
+
+        <%# เวลาที่ต้องการรับ/จัดส่ง %>
+        <div class="mb-3">
+          <%= f.label :delivery_time, "เวลาที่ต้องการให้จัดส่ง (ส่งทันที / ระบุเวลา/หากต้องการรับทันที สามารถเว้นว่างไว้ได้ครับ)", class: "form-label fw-semibold" %>
+          <%= f.datetime_field :delivery_time, class: "form-control rounded-3", min: Time.current.strftime("%Y-%m-%dT%H:%M") %>
+        </div>
+
+        <%# หมายเหตุเพิ่มเติม %>
+        <div class="mb-3">
+          <%= f.label :notes, "หมายเหตุถึงร้านค้า / ข้อจำกัดการทานอาหาร", class: "form-label fw-semibold" %>
+          <%= f.text_area :notes, rows: 1, class: "form-control rounded-3", placeholder: "เช่น ไม่ใส่ผักชี, ช้อนส้อมพลาสติก, รหัสเข้าประตูอาคาร ฯลฯ" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ ส่วนวิทยุเลือกการชำระเงิน -->
+  <div class="col-lg-12">
+    <div class="card p-3 mb-4 border-0 shadow-sm rounded-4">
+      <h5 class="fw-bold mb-3">วิธีการชำระเงิน</h5>
+
+      <div class="form-check mb-2">
+        <%= f.radio_button :payment_method, 'stripe', checked: true, class: "form-check-input", id: "pay_stripe" %>
+        <%= f.label :payment_method_stripe, "บัตรเครดิต / เดบิต (Credit / Debit Card)", class: "form-check-label", for: "pay_stripe" %>
+      </div>
+
+      <div class="form-check  mb-2">
+        <%= f.radio_button :payment_method, 'bank_transfer', class: "form-check-input", id: "pay_bank" %>
+        <%= f.label :payment_method_bank_transfer, "สแกน QR Code / โอนผ่านธนาคาร (Bank Transfer)", class: "form-check-label", for: "pay_bank" %>
+      </div>
+
+      <div class="form-check  mb-2">
+        <%= f.radio_button :payment_method, 'cash_on_pickup', class: "form-check-input", id: "pay_cash" %>
+        <%= f.label :payment_method_cash_on_pickup, "ชำระเงินสดหน้าร้าน (Pay on Pickup)", class: "form-check-label", for: "pay_cash" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= f.submit "ยืนยันการสั่งซื้อ", class: "btn btn-danger btn-lg flex-grow-1 fw-bold " %>
+  </div>
+<% end %>
+</div>
