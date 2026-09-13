@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "reservations/new"
+  get "reservations/create"
+  get "reservations/show"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -36,4 +39,6 @@ Rails.application.routes.draw do
       patch :upload_slip
     end
   end
+  resources :reservations, only: [ :new, :create, :show ]
+  get "reserve", to: "reservations#new", as: :reserve
 end

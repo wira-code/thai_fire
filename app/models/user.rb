@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :addresses, dependent: :destroy
   has_many :orders, dependent: :nullify
+  has_many :reservations
 
     enum :role, {
       customer: 0,

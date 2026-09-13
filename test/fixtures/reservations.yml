@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  name: MyString
+  email: MyString
+  phone: MyString
+  reservation_date: 2026-09-14
+  reservation_time: 2026-09-14 00:17:46
+  guests: 1
+  status: false
+
+two:
+  user: two
+  name: MyString
+  email: MyString
+  phone: MyString
+  reservation_date: 2026-09-14
+  reservation_time: 2026-09-14 00:17:46
+  guests: 1
+  status: false
