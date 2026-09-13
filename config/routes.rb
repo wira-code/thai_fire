@@ -19,10 +19,21 @@ Rails.application.routes.draw do
   # ตั้งค่าให้เข้า 127.0.0.1:3000 แล้วเด้งไปหน้า index ของ Products ทันที
   # end
   root to: "pages#home"
+  get "contact", to: "pages#contact", as: :contact
 
   resources :products, only: [ :index, :show ]
   resources :categories, only: [ :show ]
   resource :cart, only: [ :show ]
-  resources :cart_items, only: [ :create, :update, :destroy ]
+  resources :cart_items, only: [ :create, :update, :destroy ] do
+    member do
+      post :increase
+      post :decrease
+    end
+  end
   resources :orders, only: [ :index, :show, :new, :create ]
+  resources :orders do
+    member do
+      patch :upload_slip
+    end
+  end
 end

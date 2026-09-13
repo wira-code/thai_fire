@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_09_203850) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_11_204708) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "add_ons", force: :cascade do |t|
     t.boolean "available", default: true, null: false
@@ -183,7 +211,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_203850) do
     t.string "email"
     t.string "order_number", null: false
     t.integer "order_type", default: 0, null: false
-    t.integer "payment_method", null: false, default: 0
+    t.integer "payment_method", default: 0
     t.integer "payment_status", default: 0, null: false
     t.string "phone_number"
     t.datetime "scheduled_at"
@@ -207,7 +235,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_203850) do
     t.datetime "created_at", null: false
     t.bigint "order_id", null: false
     t.datetime "paid_at"
-    t.integer "payment_method", null: false,  default: 0
+    t.integer "payment_method", null: false
     t.string "provider", null: false
     t.string "provider_payment_id"
     t.integer "status", default: 0, null: false
@@ -276,6 +304,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_203850) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "users"
   add_foreign_key "cart_item_add_ons", "add_ons"
   add_foreign_key "cart_item_add_ons", "cart_items"

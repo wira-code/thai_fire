@@ -1,4 +1,6 @@
 class CartItemsController < ApplicationController
+  before_action :set_cart_item, only: [ :increase, :decrease, :destroy ]
+
   def create
     @cart = current_cart # เมธอดดึง cart ของผู้ใช้ปัจจุบัน (หรือดึงจาก session[:cart_id])
     @product = Product.find(params[:product_id])
@@ -41,7 +43,7 @@ class CartItemsController < ApplicationController
       end
     end
 
-    redirect_to cart_path, notice: "เพิ่มรายการลงในตะกร้าเรียบร้อยแล้ว"
+    redirect_to product_path(params[:product_id]), notice: "เพิ่มรายการลงในตะกร้าเรียบร้อยแล้ว"
   end
 
   def update
@@ -57,5 +59,27 @@ class CartItemsController < ApplicationController
     @cart_item = current_cart.cart_items.find(params[:id])
     @cart_item.destroy
     redirect_to cart_path, notice: "ลบรายการออกจากตะกร้าเรียบร้อยแล้ว"
+  end
+
+  # POST /cart_items/:id/increase
+  def increase
+    @cart_item.increment!(:quantity)
+    redirect_back fallback_location: root_path
+  end
+
+  # POST /cart_items/:id/decrease
+  def decrease
+    if @cart_item.quantity > 1
+      @cart_item.decrement!(:quantity)
+    else
+      @cart_item.destroy # ถ้าเหลือ 1 แล้วกดลด ให้ลบออกจากตะกร้า
+    end
+    redirect_back fallback_location: root_path
+  end
+
+  private
+
+  def set_cart_item
+    @cart_item = CartItem.find(params[:id])
   end
 end

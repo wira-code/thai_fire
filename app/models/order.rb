@@ -1,4 +1,9 @@
 class Order < ApplicationRecord
+  # สร้าง order_number และคำนวณยอดรวมให้อัตโนมัติก่อนทำ Validation
+  before_validation :generate_order_number, on: :create
+  before_validation :calculate_total, on: :create
+  before_validation :assign_user_info, if: :user_id?
+
   # ใส่ optional: true เพื่อให้ user_id เป็น nil ได้สำหรับ Guest
   belongs_to :user, optional: true
   belongs_to :address, optional: true
@@ -11,31 +16,32 @@ class Order < ApplicationRecord
   enum :order_type, {
       takeaway: 0,
       delivery: 1
-    }, validate: true
+  }, validate: true
 
   enum :status, {
       pending: 0,
-      confirmed: 1,
-      preparing: 2,
-      ready: 3,
-      out_for_delivery: 4,
-      completed: 5,
-      cancelled: 6
-    }, validate: true
+      payment_pending: 1,
+      confirmed: 2,
+      preparing: 3,
+      ready: 4,
+      out_for_delivery: 5,
+      completed: 6,
+      cancelled: 7
+  }, default: :pending
 
   enum :payment_status, {
       pending: 0,
       paid: 1,
       failed: 2,
       refunded: 3
-    }, prefix: :payment,
-    validate: true
+  }, prefix: :true,
+    default: :pending
 
   enum :payment_method, {
       stripe: 0,
       bank_transfer: 1,
       cash_on_pickup: 2
-    }, validate: true
+  } # validate: true
 
   validates :order_number, presence: true, uniqueness: true
   validates :subtotal_cents, :delivery_fee_cents, :total_cents, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -44,21 +50,18 @@ class Order < ApplicationRecord
   validates :customer_name, presence: true
   validates :phone_number, presence: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :delivery_address, presence: true
-  validates :payment_method, presence: true, inclusion: { in: %w[stripe bank_transfer] }
-  validates :total_price_cents, numericality: { greater_than_or_equal_to: 0 }
 
-  # 3. Status Definition (กำหนดสถานะของ Order)
-  # ช่วยให้เรียกเช็กออเดอร์ง่ายขึ้น เช่น order.paid?, order.pending?
-  STATUSES = %w[pending payment_pending paid preparing delivering completed cancelled].freeze
-  validates :status, inclusion: { in: STATUSES }
+  # ที่อยู่จัดส่ง: บังคับกรอกเฉพาะเมื่อ order_type เป็น delivery และไม่ใช่การจ่ายเงินสดหน้าร้าน
+  validates :delivery_address, presence: true, if: :delivery?
+  validates :payment_method, presence: true # inclusion: { in: %w[stripe bank_transfer] } เขียนซ้ำกับการกำหนด enum ข้างบน ให้เลือกอย่างใดอย่างนึง
+  validates :total_cents, numericality: { greater_than_or_equal_to: 0 }
 
-  # 4. Helper Methods (คำนวณราคาย่อยสำหรับแสดงผล)
+
+  # 3. Helper Methods (คำนวณราคาย่อยสำหรับแสดงผล)
   def total_price
-    total_price_cents / 100.0
+    total_cents / 100.0
   end
-
-  validate :delivery_requires_address
+  # Custom Validations
   validate :delivery_requires_zone
   validate :delivery_zone_must_be_active
   validate :delivery_requires_address_snapshot
@@ -66,11 +69,6 @@ class Order < ApplicationRecord
   validate :total_matches_amounts
 
   private
-  def delivery_requires_address
-    if delivery? && address.nil?
-      errors.add(:address, "must be present for delivery orders")
-    end
-  end
 
   def delivery_requires_zone
     if delivery? && delivery_zone.nil?
@@ -101,5 +99,38 @@ class Order < ApplicationRecord
     if total_cents.to_i != expected_total
       errors.add(:total_cents, "does not match subtotal and delivery fee")
     end
+  end
+
+  # 1. สุ่ม/สร้างเลขออเดอร์ที่ไม่ซ้ำกัน (เช่น TF-20260913-8492)
+  def generate_order_number
+    return if order_number.present?
+    # Format วันที่: DDMMYYYY
+    # Format วันที่: DDMMYYYY (เช่น 13092026)
+    date_prefix = Time.current.strftime("%d%m%Y")
+
+    # นับจำนวนออเดอร์ที่มีขึ้นในวันนี้
+    today_orders_count = Order.where("created_at >= ?", Time.current.beginning_of_day).count
+
+    # รันเลขต่อ เช่น 001, 002, 003
+    sequence = (today_orders_count + 1).to_s.rjust(3, "0")
+
+    # กำหนดค่าให้ order_number (เช่น 13092026-001)
+    self.order_number = "#{date_prefix}-#{sequence}"
+    # self.order_number = "#{Time.current.strftime('%Y%m%d')}-#{sequence}"
+  end
+
+  # 2. คำนวณยอด total_cents ให้ตรงกับ subtotal_cents + delivery_fee_cents เสมอ
+  def calculate_total
+    self.subtotal_cents ||= 0
+    self.delivery_fee_cents ||= 0
+    self.total_cents = subtotal_cents + delivery_fee_cents
+  end
+
+  def assign_user_info
+    return unless user
+
+    self.customer_name ||= user.try(:name) || user.try(:full_name)
+    self.email ||= user.email
+    self.phone_number ||= user.try(:phone) || user.try(:phone_number)
   end
 end

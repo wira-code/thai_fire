@@ -30,7 +30,7 @@ gem "solid_cable"
 
 # Global
 gem "devise"
-# gem "stripe"
+gem "stripe"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

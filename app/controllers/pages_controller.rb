@@ -18,4 +18,8 @@ class PagesController < ApplicationController
     # ดึงเฉพาะรายการที่เป็น "เมนูขายดี" ( bestseller: true )
     @bestseller_products = Product.where(active: true, bestseller: true).limit(3)
   end
+
+  def contact
+    # action เปล่าสำหรับแสดงหน้า contact
+  end
 end
