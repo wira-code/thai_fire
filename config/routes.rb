@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   # root to: "devise/sessions#new"
   # ตั้งค่าให้เข้า 127.0.0.1:3000 แล้วเด้งไปหน้า index ของ Products ทันที
   # end
+
+  # Customer Part
   root to: "pages#home"
   get "contact", to: "pages#contact", as: :contact
 
@@ -41,4 +43,11 @@ Rails.application.routes.draw do
   end
   resources :reservations, only: [ :new, :create, :show ]
   get "reserve", to: "reservations#new", as: :reserve
+
+  # Admin Part
+  namespace :admin do
+    resources :products
+    resources :reservations, only: [ :index, :update ]
+    resources :orders, only: [ :index, :update, :show ]
+  end
 end

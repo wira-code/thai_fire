@@ -1,2 +1,69 @@
-<h1>Reservations#show</h1>
-<p>Find me in app/views/reservations/show.html.erb</p>
+<div class="container my-5" style="max-width: 650px;">
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+    <%# Header ส่วนหัว %>
+    <div class="bg-dark text-white p-4 text-center position-relative">
+      <h3 class="fw-bold mb-1">🎉 การจองโต๊ะสำเร็จ</h3>
+      <p class="text-white-50 mb-0">ขอบคุณที่เลือกใช้บริการ Thai Fire Restaurant</p>
+    </div>
+
+    <div class="card-body p-4 p-md-5">
+
+      <%# Status Badge %>
+      <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <span class="text-muted fw-semibold">สถานะการจอง:</span>
+        <% if @reservation.status == "confirmed" %>
+          <span class="badge bg-success px-3 py-2 fs-6 rounded-pill">ยืนยันแล้ว (Confirmed)</span>
+        <% else %>
+          <span class="badge bg-warning text-dark px-3 py-2 fs-6 rounded-pill">รอยืนยัน (Pending)</span>
+        <% end %>
+      </div>
+
+      <%# Booking Summary การจอง %>
+      <div class="bg-light p-4 rounded-3 mb-4">
+        <h5 class="fw-bold mb-3 text-danger"><i class="bi bi-calendar-check me-2"></i>รายละเอียดวันและเวลา</h5>
+
+        <div class="row g-3">
+          <div class="col-6">
+            <small class="text-muted d-block">วันที่ (Date)</small>
+            <strong class="fs-6"><%= @reservation.reservation_date.strftime("%d/%m/%Y") %></strong>
+          </div>
+
+          <div class="col-6">
+            <small class="text-muted d-block">เวลา (Time)</small>
+            <strong class="fs-6"><%= @reservation.reservation_time.strftime("%H:%M") %> น.</strong>
+          </div>
+
+          <div class="col-12">
+            <small class="text-muted d-block">จำนวนผู้เข้าใช้บริการ (Guests)</small>
+            <strong class="fs-6"><%= @reservation.guests %> ท่าน</strong>
+          </div>
+        </div>
+      </div>
+
+      <%# Customer Contact Information %>
+      <div class="mb-4 px-2">
+        <h5 class="fw-bold mb-3"><i class="bi bi-person-lines-fill me-2"></i>ข้อมูลผู้จอง</h5>
+        <div class="d-flex flex-column gap-2 text-secondary">
+          <div><strong>ชื่อ-นามสกุล:</strong> <%= @reservation.name %></div>
+          <div><strong>อีเมล:</strong> <%= @reservation.email %></div>
+          <div><strong>เบอร์โทรศัพท์:</strong> <%= @reservation.phone %></div>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <%# Action Buttons %>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+        <%= link_to root_path, class: "btn btn-outline-secondary px-4 fw-semibold rounded-3" do %>
+          ← กลับหน้าหลัก
+        <% end %>
+
+        <button onclick="window.print()" class="btn btn-dark px-4 fw-semibold rounded-3">
+          🖨️ พิมพ์ใบจอง
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
