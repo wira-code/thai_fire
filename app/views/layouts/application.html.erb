@@ -58,6 +58,9 @@
     <%= yield %>
 
     <%# แปะ Mini Cart ไว้ล่างสุดของ Layout %>
-    <%= render 'shared/mini_cart' %>
+    <%# แสดง Mini Cart เฉพาะหน้าที่ไม่ได้อยู่ใน admin namespace %>
+    <% unless controller_path.start_with?('admin/') %>
+      <%= render 'shared/mini_cart' %>
+    <% end %>
   </body>
 </html>

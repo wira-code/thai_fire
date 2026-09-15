@@ -3,7 +3,7 @@ module Admin
       # TODO: เพิ่ม before_action :authenticate_admin! เพื่อเช็กสิทธิ์ภายหลัง
       before_action :set_product, only: [ :edit, :update, :destroy ]
     def index
-      @products = Product.all.order(created_at: :desc)
+      @products = Product.includes(:category).all.order(created_at: :desc)
     end
 
     def new
@@ -42,7 +42,14 @@ module Admin
     end
 
     def product_params
-      params.require(:product).permit(:name, :description, :price_cents, :image_url, :category)
+      params.require(:product).permit(
+        :name,
+        :description,
+        :price_cents,
+        :image_url,
+        :category,
+        :ingredients
+        )
     end
   end
 end

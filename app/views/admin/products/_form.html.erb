@@ -1,0 +1,51 @@
+<%= form_with model: [:admin, product], local: true do |f| %>
+  <% if product.errors.any? %>
+    <div class="alert alert-danger rounded-3">
+      <ul class="mb-0 ps-3">
+        <% product.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, "Menu Name", class: "form-label fw-bold" %>
+    <%= f.text_field :name, class: "form-control rounded-3", required: true %>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <%= f.label :category, "Category", class: "form-label fw-bold" %>
+        <%= link_to "+ New Category", admin_categories_path, target: "_blank", class: "small text-danger text-decoration-none" %>
+      </div>
+      <%= f.collection_select :category_id, Category.all, :id, :name, { prompt: "Select Category" }, { class: "form-select rounded-3", required: true } %>
+      <%#= f.text_field :category, class: "form-control rounded-3" %>
+    </div>
+    <div class="col-md-6 mb-3">
+      <%= f.label :price_cents, "Price (Cents)", class: "form-label fw-bold" %>
+      <%= f.number_field :price_cents, class: "form-control rounded-3", required: true %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :image_url, "URL Photo", class: "form-label fw-bold" %>
+    <%= f.text_field :image_url, class: "form-control rounded-3", placeholder: "https://..." %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, "Description", class: "form-label fw-bold" %>
+    <%= f.text_area :description, rows: 1, class: "form-control rounded-3" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :ingredients, "Ingredients", class: "form-label fw-bold" %>
+    <%= f.text_area :ingredients, rows: 2, class: "form-control rounded-3" %>
+  </div>
+
+  <div class="d-flex gap-2 pt-2">
+    <%= f.submit product.persisted? ? "Save Change" : "Submit", class: "btn btn-danger fw-bold rounded-3 px-4" %>
+    <%= link_to "Cancel", admin_products_path, class: "btn btn-outline-secondary rounded-3 px-4" %>
+  </div>
+<% end %>
