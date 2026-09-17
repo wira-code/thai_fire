@@ -23,7 +23,7 @@
             <% @orders.each do |order| %>
               <tr>
                 <td class="fw-bold">#<%= order.order_number %></td>
-                <td><%= order.created_at.strftime("%d/%m/%Y - %I:%M %p") %> น.</td>
+                <td><%= order.created_at.strftime("%d/%m/%Y - %I:%M %p.") %></td>
                 <td>
                   <div class="fw-semibold">
                     <%= order.user.try(:first_name) || order.user.try(:name) || order.user.try(:username) || order.try(:customer_name) || "ไม่ระบุชื่อ" %>
@@ -39,13 +39,15 @@
                   <%= form_with model: [:admin, order], local: true, class: "d-inline-block" do |f| %>
                     <%= f.select :status,
                         [
-                          ["⏳ รอดำเนินการ (Pending)", "pending"],
-                          ["🍳 กำลังปรุง (Preparing)", "preparing"],
-                          ["✅ เสร็จสิ้น (Completed)", "completed"],
-                          ["❌ ยกเลิก (Cancelled)", "cancelled"]
+                          ["⏳ Pending", "pending"],
+                          ["🍳 Preparing", "preparing"],
+                          ["✅ Completed", "completed"],
+                          ["❌ Cancelled", "cancelled"]
                         ],
                         {},
-                        { class: "form-select form-select-sm rounded-3 border-secondary fw-semibold", onchange: "this.form.submit()" } %>
+                        {
+                        class: "form-select form-select-sm rounded-3 fw-bold #{order_status_badge_class(order.status)}",
+                        onchange: "this.form.submit()" } %>
                   <% end %>
                 </td>
 

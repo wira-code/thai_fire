@@ -6,7 +6,7 @@
   </div>
 
   <% if @order.present? %>
-    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="transform: none !important; transition: none !important;">
       <div class="row g-3 border-bottom pb-3 mb-3">
         <div class="col-6">
           <small class="text-muted d-block">Customer Name</small>
@@ -17,7 +17,10 @@
         </div>
         <div class="col-6 text-end">
           <small class="text-muted d-block">Status</small>
-          <span class="badge bg-dark px-3 py-2 rounded-pill"><%= @order.status.to_s.upcase %></span>
+          <span class="badge px-3 py-2 rounded-pill fw-bold
+            <%= order_status_badge_class(@order.status) %>">
+            <%= @order.status.to_s.upcase %>
+          </span>
         </div>
       </div>
 
@@ -36,14 +39,14 @@
             <% if @order_items.any? %>
               <% @order_items.each do |item| %>
                 <tr>
-                  <td class="fw-bold"><%= item.product.try(:name) || "สินค้า" %></td>
-                  <td class="text-center"><%= item.quantity %></td>
-                  <td class="text-end">€<%= number_with_precision((item.try(:unit_price_cents) || item.try(:price) || 0) / 100.0, precision: 2) %></td>
-                  <td class="text-end fw-bold">€<%= number_with_precision((item.quantity * (item.try(:unit_price_cents) || item.try(:price) || 0)) / 100.0, precision: 2) %></td>
+                  <td class="fw-bold border-bottom-0"><%= item.product.try(:name) || "สินค้า" %></td>
+                  <td class="text-center  border-bottom-0"><%= item.quantity %></td>
+                  <td class="text-end  border-bottom-0">€<%= number_with_precision((item.try(:unit_price_cents) || item.try(:price) || 0) / 100.0, precision: 2) %></td>
+                  <td class="text-end fw-bold  border-bottom-0">€<%= number_with_precision((item.quantity * (item.try(:unit_price_cents) || item.try(:price) || 0)) / 100.0, precision: 2) %></td>
                 </tr>
               <% end %>
             <% else %>
-              <tr>
+              <tr class="border-bottom-0">
                 <td colspan="4" class="text-center text-muted">No item in order</td>
               </tr>
             <% end %>

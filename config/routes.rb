@@ -54,7 +54,7 @@ Rails.application.routes.draw do
     get "categories/create"
     resources :products
     resources :categories, only: [ :index, :new, :create, :destroy ]
-    resources :reservations, only: [ :index, :update ]
+    resources :reservations, only: [ :index, :show, :update, :destroy ]
     resources :orders, only: [ :index, :update, :show ]
   end
 end
