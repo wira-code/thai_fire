@@ -1,0 +1,64 @@
+<div class="container my-4" style="max-width: 800px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <%# ใช้ order_number ถ้ามี ถ้าไม่มีใช้ id %>
+    <h3 class="fw-bold mb-0">📄 Order details #<%= @order.try(:order_number) || @order.try(:id) %></h3>
+    <%= link_to "← Back to Order lists", admin_orders_path, class: "btn btn-outline-secondary rounded-3" %>
+  </div>
+
+  <% if @order.present? %>
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+      <div class="row g-3 border-bottom pb-3 mb-3">
+        <div class="col-6">
+          <small class="text-muted d-block">Customer Name</small>
+          <strong>
+            <%#= @order.user.try(:first_name) || @order.user.try(:name) || @order.user.try(:email) || "Customer" %>
+            <%= @order.user.try(:first_name) || @order.user.try(:name) || @order.user.try(:username) || @order.try(:customer_name) || "ไม่ระบุชื่อ" %>
+          </strong>
+        </div>
+        <div class="col-6 text-end">
+          <small class="text-muted d-block">Status</small>
+          <span class="badge bg-dark px-3 py-2 rounded-pill"><%= @order.status.to_s.upcase %></span>
+        </div>
+      </div>
+
+      <h5 class="fw-bold mb-3 text-danger">🛒 Menu Lists</h5>
+      <div class="table-responsive mb-3">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>Menu</th>
+              <th class="text-center">QTY</th>
+              <th class="text-end">Price/Unit</th>
+              <th class="text-end">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @order_items.any? %>
+              <% @order_items.each do |item| %>
+                <tr>
+                  <td class="fw-bold"><%= item.product.try(:name) || "สินค้า" %></td>
+                  <td class="text-center"><%= item.quantity %></td>
+                  <td class="text-end">€<%= number_with_precision((item.try(:unit_price_cents) || item.try(:price) || 0) / 100.0, precision: 2) %></td>
+                  <td class="text-end fw-bold">€<%= number_with_precision((item.quantity * (item.try(:unit_price_cents) || item.try(:price) || 0)) / 100.0, precision: 2) %></td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="4" class="text-center text-muted">No item in order</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+        <h5 class="fw-bold mb-0">Total price</h5>
+        <h4 class="fw-bold text-danger mb-0">
+          €<%= number_with_precision((@order.try(:total_price_cents) || @order.try(:total_price) || 0), precision: 2) %>
+        </h4>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-warning text-center">ไม่พบข้อมูลออเดอร์นี้</div>
+  <% end %>
+</div>
