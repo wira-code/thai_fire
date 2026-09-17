@@ -1,0 +1,75 @@
+
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">📅 Reservation Management</h2>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="transform: none !important; transition: none !important;">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th class="ps-4"># Booking ID</th>
+            <th>Date & Time</th>
+            <th>Customer Name</th>
+            <th class="text-center">Guests</th>
+            <th class="text-center">Status</th>
+            <th class="text-end pe-4">Management</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @reservations.any? %>
+            <% @reservations.each do |res| %>
+              <tr>
+                <td class="ps-4 fw-bold">#<%= res.id %></td>
+                <td>
+                  <div class="fw-semibold">
+                    <%= res.try(:reservation_date)&.strftime("%d/%m/%Y") || res.created_at.strftime("%d/%m/%Y") %>
+                  </div>
+                  <small class="text-muted">
+                    <%= res.try(:reservation_time)&.strftime("%I:%M %p") || res.created_at.strftime("%I:%M %p") %>
+                  </small>
+                </td>
+                <td>
+                  <div class="fw-semibold">
+                    <%= res.try(:name) || res.user.try(:first_name) || res.user.try(:name) || "Guest" %>
+                  </div>
+                  <small class="text-muted"><%= res.try(:phone) || res.user.try(:email) %></small>
+                </td>
+                <td class="text-center fw-bold">
+                  <%= res.try(:guests_count) || res.try(:party_size) || 1 %> ท่าน
+                </td>
+                <td class="text-center">
+                  <%= form_with model: [:admin, res], method: :patch, local: true, class: "d-inline-block" do |f| %>
+                    <%= f.select :status,
+                        [
+                          ["⏳ Pending", "pending"],
+                          ["✅ Confirmed", "confirmed"],
+                          ["🏁 Completed", "completed"],
+                          ["❌ Cancelled", "cancelled"]
+                        ],
+                        {},
+                        {
+                          class: "form-select form-select-sm rounded-3 fw-bold #{reservation_status_badge_class(res.status)}",
+                          onchange: "this.form.submit()"
+                        } %>
+                  <% end %>
+                </td>
+                <td class="text-end pe-4">
+                  <div class="d-flex justify-content-end align-items-center gap-1">
+                    <%= link_to "Details", admin_reservation_path(res), class: "btn btn-sm btn-outline-dark rounded-3 me-1" %>
+                    <%= button_to "Delete", admin_reservation_path(res), method: :delete, data: { confirm: "คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?" }, class: "btn btn-sm btn-outline-danger rounded-3 d-inline-block" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="6" class="text-center py-4 text-muted">ยังไม่มีรายการจองโต๊ะในขณะนี้</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

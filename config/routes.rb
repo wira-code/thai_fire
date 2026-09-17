@@ -46,12 +46,6 @@ Rails.application.routes.draw do
 
   # Admin Part
   namespace :admin do
-    get "orders/index"
-    get "orders/show"
-    get "orders/update"
-    get "categories/index"
-    get "categories/new"
-    get "categories/create"
     resources :products
     resources :categories, only: [ :index, :new, :create, :destroy ]
     resources :reservations, only: [ :index, :show, :update, :destroy ]
