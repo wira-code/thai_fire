@@ -38,10 +38,11 @@
                   <small class="text-muted"><%= res.try(:phone) || res.user.try(:email) %></small>
                 </td>
                 <td class="text-center fw-bold">
-                  <%= res.try(:guests_count) || res.try(:party_size) || 1 %> ท่าน
+                  <%= res.guests || 1 %> persons
                 </td>
                 <td class="text-center">
                   <%= form_with model: [:admin, res], method: :patch, local: true, class: "d-inline-block" do |f| %>
+                  <%#= form_with model: [:admin, res], method: :patch, local: true, class: "d-inline-block" do |f| %>
                     <%= f.select :status,
                         [
                           ["⏳ Pending", "pending"],

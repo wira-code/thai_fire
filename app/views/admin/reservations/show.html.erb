@@ -48,7 +48,7 @@
       </div>
       <div class="col-12">
         <small class="text-muted d-block">Number of Guests</small>
-        <h5 class="fw-bold"><%= @reservation.try(:guests_count) || @reservation.try(:party_size) || 1 %> ท่าน</h5>
+        <h5 class="fw-bold"><%= @reservation.guests || 1 %> persons</h5>
       </div>
 
       <% if @reservation.respond_to?(:special_request) && @reservation.special_request.present? %>

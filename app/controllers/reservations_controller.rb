@@ -27,6 +27,6 @@ class ReservationsController < ApplicationController
   private
 
   def reservation_params
-    params.require(:reservation).permit(:name, :email, :phone, :reservation_date, :reservation_time, :guests)
+    params.require(:reservation).permit(:name, :email, :phone, :reservation_date, :reservation_time, :guests, :special_request)
   end
 end

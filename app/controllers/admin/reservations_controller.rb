@@ -9,10 +9,11 @@ class Admin::ReservationsController < ApplicationController
   end
 
   def update
+    @reservation = Reservation.find(params[:id])
     if @reservation.update(reservation_params)
-      redirect_to admin_reservations_path, notice: "อัปเดตสถานะการจองเรียบร้อยแล้ว"
+      redirect_to admin_reservations_path, notice: "อัปเดตสถานะเรียบร้อยแล้ว"
     else
-      redirect_to admin_reservations_path, alert: "ไม่สามารถอัปเดตสถานะการจองได้"
+      redirect_to admin_reservations_path, alert: "ไม่สามารถอัปเดตสถานะได้"
     end
   end
 
@@ -28,6 +29,6 @@ class Admin::ReservationsController < ApplicationController
     end
 
     def reservation_params
-      params.require(:reservation).permit(:status, :guests_count, :special_request)
+      params.require(:reservation).permit(:status, :guests, :special_request)
     end
 end
