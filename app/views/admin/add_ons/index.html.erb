@@ -1,0 +1,55 @@
+<h1>Admin::AddOns#index</h1>
+<p>Find me in app/views/admin/add_ons/index.html.erb</p>
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">🍳 จัดการ Add-ons (ท็อปปิ้ง)</h2>
+    <%= link_to "+ เพิ่ม Add-on ใหม่", new_admin_add_on_path, class: "btn btn-danger" %>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-4">ชื่อ Add-on</th>
+              <th>คำอธิบาย</th>
+              <th>ราคา (€)</th>
+              <th>สถานะ</th>
+              <th class="text-end pe-4">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @add_ons.any? %>
+              <% @add_ons.each do |add_on| %>
+                <tr>
+                  <td class="ps-4 fw-bold"><%= add_on.name %></td>
+                  <td class="text-muted"><%= add_on.description.presence || "-" %></td>
+                  <td class="fw-bold text-danger">
+                    €<%= sprintf("%.2f", (add_on.price_cents || 0) / 100.0) %>
+                  </td>
+                  <td>
+                    <% if add_on.available %>
+                      <span class="badge bg-success-subtle text-success border border-success-subtle">พร้อมจำหน่าย</span>
+                    <% else %>
+                      <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">หมด</span>
+                    <% end %>
+                  </td>
+                  <td class="text-end pe-4">
+                    <%= link_to "แก้ไข", edit_admin_add_on_path(add_on), class: "btn btn-sm btn-outline-primary me-1" %>
+                    <%= link_to "ลบ", admin_add_on_path(add_on), data: { turbo_method: :delete, turbo_confirm: "ยืนยันการลบ Add-on นี้?" }, class: "btn btn-sm btn-outline-danger" %>
+                  </td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="5" class="text-center py-4 text-muted">ยังไม่มีรายการ Add-on ในระบบ</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

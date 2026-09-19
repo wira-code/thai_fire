@@ -49,3 +49,7 @@ body {
   background: #555;
   border-radius: 4px;
 }
+
+html {
+  scrollbar-gutter: stable;
+}

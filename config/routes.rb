@@ -50,5 +50,9 @@ Rails.application.routes.draw do
     resources :categories, only: [ :index, :new, :create, :destroy ]
     resources :reservations, only: [ :index, :show, :update, :destroy ]
     resources :orders, only: [ :index, :update, :show ]
+    resources :options do
+    resources :option_choices, only: [ :create, :destroy ] # สำหรับจัดการ choices ภายใน option
+    end
+    resources :add_ons
   end
 end

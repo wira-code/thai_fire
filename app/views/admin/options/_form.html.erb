@@ -1,0 +1,81 @@
+<%= form_with(model: [:admin, option], local: true) do |f| %>
+  <% if option.errors.any? %>
+    <div class="alert alert-danger">
+      <h6 class="alert-heading"><%= pluralize(option.errors.count, "error") %> prohibited this option from being saved:</h6>
+      <ul class="mb-0">
+        <% option.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- ข้อมูล Option หลัก -->
+  <div class="card p-3 mb-4 bg-light border-0">
+    <h5 class="fw-bold mb-3">⚙️ ตั้งค่า Option</h5>
+    <div class="mb-3">
+      <%= f.label :name, "ชื่อ Option (เช่น ระดับความเผ็ด / เลือกเนื้อสัตว์)", class: "form-label fw-bold" %>
+      <%= f.text_field :name, class: "form-control", placeholder: "Spiciness Level", required: true %>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <div class="form-check form-switch">
+          <%= f.check_box :required, class: "form-check-input", id: "optionRequiredCheck" %>
+          <%= f.label :required, "จำเป็นต้องเลือก (Required *)", class: "form-check-label fw-bold", for: "optionRequiredCheck" %>
+        </div>
+      </div>
+      <div class="col-md-6 mb-2">
+        <div class="form-check form-switch">
+          <%= f.check_box :multiple, class: "form-check-input", id: "optionMultipleCheck" %>
+          <%= f.label :multiple, "เลือกได้หลายตัวเลือก (Multiple Choice)", class: "form-check-label fw-bold", for: "optionMultipleCheck" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ข้อมูล Choices ด้านใน -->
+  <div class="card p-3 mb-4 border shadow-sm">
+    <h5 class="fw-bold mb-3">📋 รายการตัวเลือก (Option Choices)</h5>
+    <p class="text-muted small">หากตัวเลือกไหนบวกราคาเพิ่ม ให้ระบุราคาในช่อง Cents (เช่น 100 = +€1.00) หากไม่เพิ่มให้ใส่ 0</p>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>ชื่อตัวเลือก (Choice Name)</th>
+            <th>ราคาบวกเพิ่ม (Cents)</th>
+            <th class="text-center">ลบ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= f.fields_for :option_choices do |choice_form| %>
+            <tr>
+              <td>
+                <%= choice_form.hidden_field :id %>
+                <%= choice_form.text_field :name, class: "form-control", placeholder: "เช่น เผ็ดมาก / ไก่ / กุ้ง" %>
+              </td>
+              <td>
+                <%= choice_form.number_field :price_cents, class: "form-control", placeholder: "0" %>
+              </td>
+              <td class="text-center">
+                <% if choice_form.object.persisted? %>
+                  <div class="form-check d-flex justify-content-center">
+                    <%= choice_form.check_box :_destroy, class: "form-check-input bg-danger border-danger" %>
+                  </div>
+                <% else %>
+                  <span class="text-muted small">-</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= f.submit "บันทึกข้อมูล", class: "btn btn-danger" %>
+    <%= link_to "ยกเลิก", admin_options_path, class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>

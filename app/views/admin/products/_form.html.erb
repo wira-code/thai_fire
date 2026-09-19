@@ -9,6 +9,21 @@
     </div>
   <% end %>
 
+  <div class="row mb-4">
+    <div class="col-6">
+      <div class="form-check form-switch">
+        <%= f.check_box :featured, class: "form-check-input", id: "flexSwitchCheckFeatured" %>
+        <%= f.label :is_featured, "Recommended Menu", class: "form-check-label fw-bold", for: "flexSwitchCheckFeatured" %>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-check form-switch">
+        <%= f.check_box :bestseller, class: "form-check-input", id: "flexSwitchCheckBestseller" %>
+        <%= f.label :is_bestseller, "Best Seller Menu", class: "form-check-label fw-bold", for: "flexSwitchCheckBestseller" %>
+      </div>
+    </div>
+  </div>
+
   <div class="mb-3">
     <%= f.label :name, "Menu Name", class: "form-label fw-bold" %>
     <%= f.text_field :name, class: "form-control rounded-3", required: true %>
@@ -42,6 +57,36 @@
   <div class="mb-3">
     <%= f.label :ingredients, "Ingredients", class: "form-label fw-bold" %>
     <%= f.text_area :ingredients, rows: 2, class: "form-control rounded-3" %>
+  </div>
+
+  <!-- เลือก Options ที่ใช้กับเมนูนี -->
+  <div class="mb-4">
+    <label class="form-label fw-bold">Options สำหรับเมนูนี่</label>
+    <div class="row">
+      <%= f.collection_check_boxes :option_ids, Option.all, :id, :name do |b| %>
+        <div class="col-md-4">
+          <div class="form-check">
+            <%= b.check_box(class: "form-check-input") %>
+            <%= b.label(class: "form-check-label") %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- เลือก Add-ons ที่ใช้กับเมนูนี -->
+  <div class="mb-4">
+    <label class="form-label fw-bold">Add-ons (ท็อปปิ้ง) ที่เลือกได้</label>
+    <div class="row">
+      <%= f.collection_check_boxes :add_on_ids, AddOn.all, :id, :name do |b| %>
+        <div class="col-md-4">
+          <div class="form-check">
+            <%= b.check_box(class: "form-check-input") %>
+            <%= b.label(class: "form-check-label") %>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="d-flex gap-2 pt-2">

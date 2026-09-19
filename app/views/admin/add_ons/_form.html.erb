@@ -1,0 +1,38 @@
+<%= form_with(model: [:admin, add_on], local: true) do |f| %>
+  <% if add_on.errors.any? %>
+    <div class="alert alert-danger">
+      <h6 class="alert-heading"><%= pluralize(add_on.errors.count, "error") %> prohibited this add-on from being saved:</h6>
+      <ul class="mb-0">
+        <% add_on.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, "ชื่อ Add-on (เช่น ไข่ดาว / Omelette)", class: "form-label fw-bold" %>
+    <%= f.text_field :name, class: "form-control", placeholder: "Fried Egg", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, "คำอธิบายเพิ่มเติม", class: "form-label fw-bold" %>
+    <%= f.text_area :description, class: "form-control", rows: 2, placeholder: "ไข่ดาวทอดกรอบ" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :price_cents, "ราคา (Cents เช่น 200 = €2.00)", class: "form-label fw-bold" %>
+    <%= f.number_field :price_cents, class: "form-control", placeholder: "200", required: true %>
+    <div class="form-text">ใส่ราคาเป็นหน่วย Cent (ตัวอย่าง: 2.00 € ให้ใส่ 200)</div>
+  </div>
+
+  <div class="mb-4 form-check form-switch">
+    <%= f.check_box :available, class: "form-check-input", id: "addOnAvailableCheck" %>
+    <%= f.label :available, "พร้อมจำหน่าย (Available)", class: "form-check-label fw-bold", for: "addOnAvailableCheck" %>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= f.submit "บันทึกข้อมูล", class: "btn btn-danger" %>
+    <%= link_to "ยกเลิก", admin_add_ons_path, class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>

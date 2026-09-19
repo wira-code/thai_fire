@@ -48,7 +48,10 @@ module Admin
         :price_cents,
         :image_url,
         :category,
-        :ingredients
+        :ingredients,
+        :featured,
+        :bestseller,
+        option_ids: [], add_on_ids: []
         )
     end
   end
