@@ -1,11 +1,8 @@
-<h1>Admin::Options#index</h1>
-<p>Find me in app/views/admin/options/index.html.erb</p>
 
-
-<div class="container py-4">
+<div class="container py-3">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold mb-0">⚙️ จัดการ Options (ตัวเลือกอาหาร)</h2>
-    <%= link_to "+ เพิ่ม Option ใหม่", new_admin_option_path, class: "btn btn-danger" %>
+    <h2 class="fw-bold mb-0">⚙️ Options Management</h2>
+    <%= link_to "+ New Option", new_admin_option_path, class: "btn btn-danger" %>
   </div>
 
   <div class="row">
@@ -17,18 +14,18 @@
               <h5 class="fw-bold mb-0 text-danger"><%= option.name %></h5>
               <div>
                 <% if option.required %>
-                  <span class="badge bg-danger-subtle text-danger border border-danger-subtle">บังคับเลือก</span>
+                  <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Require *</span>
                 <% end %>
                 <% if option.multiple %>
-                  <span class="badge bg-info-subtle text-info border border-info-subtle">เลือกได้หลายข้อ</span>
+                  <span class="badge bg-info-subtle text-info border border-info-subtle">Chose many choices</span>
                 <% else %>
-                  <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">เลือกได้ข้อเดียว</span>
+                  <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">Only one choice</span>
                 <% end %>
               </div>
             </div>
 
             <div class="card-body">
-              <h6 class="text-muted fw-bold mb-2">Choices ทั้งหมด:</h6>
+              <h6 class="text-muted fw-bold mb-2">All Choices:</h6>
               <ul class="list-group list-group-flush">
                 <% if option.option_choices.any? %>
                   <% option.option_choices.each do |choice| %>
@@ -37,19 +34,19 @@
                       <% if choice.price_cents.to_i > 0 %>
                         <span class="badge bg-light text-dark border">+€<%= sprintf("%.2f", choice.price_cents / 100.0) %></span>
                       <% else %>
-                        <span class="text-muted small">ฟรี</span>
+                        <span class="text-muted small">Free</span>
                       <% end %>
                     </li>
                   <% end %>
                 <% else %>
-                  <li class="list-group-item text-muted italic p-0">ยังไม่มี Choice ใน Option นี้</li>
+                  <li class="list-group-item text-muted italic p-0">No Choice in this Option</li>
                 <% end %>
               </ul>
             </div>
 
             <div class="card-footer bg-white border-top-0 d-flex justify-content-end gap-2 pb-3">
-              <%= link_to "แก้ไข", edit_admin_option_path(option), class: "btn btn-sm btn-outline-primary" %>
-              <%= link_to "ลบ", admin_option_path(option), data: { turbo_method: :delete, turbo_confirm: "ยืนยันการลบ Option นี้และ Choices ทั้งหมดข้างใน?" }, class: "btn btn-sm btn-outline-danger" %>
+              <%= link_to "Edit", edit_admin_option_path(option), class: "btn btn-sm btn-outline-primary" %>
+              <%= link_to "Delete", admin_option_path(option), data: { turbo_method: :delete, turbo_confirm: "Are you sure to delete Option and all Choices?" }, class: "btn btn-sm btn-outline-danger" %>
             </div>
           </div>
         </div>
@@ -57,7 +54,7 @@
     <% else %>
       <div class="col-12">
         <div class="card shadow-sm border-0 text-center py-5">
-          <p class="text-muted mb-0">ยังไม่มีรายการ Option ในระบบ</p>
+          <p class="text-muted mb-0">No Option in system</p>
         </div>
       </div>
     <% end %>

@@ -1,13 +1,11 @@
-<h1>Admin::AddOns#edit</h1>
-<p>Find me in app/views/admin/add_ons/edit.html.erb</p>
 
-
-<div class="container py-4">
+<div class="container py-3">
   <div class="row justify-content-center">
     <div class="col-md-8">
+      <%= link_to "← Back to Add_ons management", admin_add_ons_path, class: "btn btn-outline-secondary rounded-3 mb-3" %>
       <div class="card shadow-sm border-0">
         <div class="card-body p-4">
-          <h3 class="fw-bold mb-4">✏️ แก้ไข Add-on</h3>
+          <h3 class="fw-bold mb-4">✏️ Edit Add-on</h3>
           <%= render "form", add_on: @add_on %>
         </div>
       </div>
