@@ -1,0 +1,79 @@
+
+<div class="container my-4">
+  <h2 class="mb-4 fw-bold">📊 Admin Dashboard</h2>
+
+  <!-- สรุปการ์ดตัวเลข (Stat Cards) -->
+  <div class="row g-3 mb-4">
+    <!-- การ์ด 1: ยอดขายวันนี้ -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm rounded-3 bg-primary text-white">
+        <div class="card-body">
+          <h6 class="text-white-50 text-uppercase fw-bold">ยอดขายวันนี้</h6>
+          <h2 class="display-6 fw-bold mb-0">฿<%= number_with_precision(@today_sales, precision: 2, delimiter: ',') %></h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- การ์ด 2: จำนวนออเดอร์วันนี้ -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm rounded-3 bg-success text-white">
+        <div class="card-body">
+          <h6 class="text-white-50 text-uppercase fw-bold">ออเดอร์ใหม่วันนี้</h6>
+          <h2 class="display-6 fw-bold mb-0"><%= @today_orders_count %> รายการ</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- การ์ด 3: จำนวนการจองโต๊ะวันนี้ -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm rounded-3 bg-warning text-dark">
+        <div class="card-body">
+          <h6 class="text-dark-50 text-uppercase fw-bold">การจองโต๊ะวันนี้</h6>
+          <h2 class="display-6 fw-bold mb-0"><%= @today_reservations_count %> รายการ</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ตารางสรุปการจองโต๊ะล่าสุดของวันนี้ -->
+  <div class="card border-0 shadow-sm rounded-3">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-bold">📅 รายการจองโต๊ะของวันนี้</h5>
+      <%= link_to "ดูการจองทั้งหมด", admin_reservations_path, class: "btn btn-sm btn-outline-primary" %>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>เวลา</th>
+              <th>ชื่อลูกค้า</th>
+              <th>จำนวนคน</th>
+              <th>สถานะ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @today_reservations.any? %>
+              <% @today_reservations.each do |res| %>
+                <tr>
+                  <td><%= res.reservation_date.strftime("%H:%M") %></td>
+                  <td><%= res.name rescue res.user&.name %></td>
+                  <td><%= res.guests || 1 %> ท่าน</td>
+                  <td>
+                    <span class="badge <%= reservation_status_badge_class(res.status) rescue 'bg-secondary' %>">
+                      <%= res.status.capitalize %>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="4" class="text-center py-4 text-muted">ยังไม่มีรายการจองสำหรับวันนี้</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

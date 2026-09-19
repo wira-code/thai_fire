@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get "reservations/new"
-  get "reservations/create"
-  get "reservations/show"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -46,6 +43,10 @@ Rails.application.routes.draw do
 
   # Admin Part
   namespace :admin do
+    # กำหนด root ของ admin ให้ชี้มาที่ dashboard#index หรือใช้ get 'dashboard', to: 'dashboard#index'
+    get "dashboard", to: "dashboard#index"
+    root to: "dashboard#index"
+
     resources :products
     resources :categories, only: [ :index, :new, :create, :destroy ]
     resources :reservations, only: [ :index, :show, :update, :destroy ]
