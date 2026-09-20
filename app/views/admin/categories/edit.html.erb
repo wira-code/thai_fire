@@ -1,0 +1,21 @@
+
+<div class="container my-4" style="max-width: 700px;">
+  <div class="card border-0 shadow-sm rounded-4 p-4" style="transform: none !important; transition: none !important;">
+    <h3 class="fw-bold mb-4">✏️ Edit Category</h3>
+
+    <%= form_with(model: [:admin, @category], local: true) do |f| %>
+    <div class="mb-3">
+      <%= f.label :name, "Category Name", class: "form-label fw-bold" %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :description, "Description", class: "form-label fw-bold" %>
+      <%= f.text_area :description, class: "form-control", rows: 3 %>
+    </div>
+
+      <%= f.submit "Save change", class: "btn btn-danger fw-bold rounded-3 px-4" %>
+      <%= link_to "Cancel", admin_categories_path, class: "btn btn-outline-secondary ms-2" %>
+    <% end %>
+  </div>
+</div>

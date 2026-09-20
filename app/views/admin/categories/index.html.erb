@@ -9,7 +9,7 @@
     <%# ตารางแสดงรายการ Categories %>
     <div class="col-md-7">
       <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="transform: none !important; transition: none !important;">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle mb-0 w-100">
           <thead class="table-dark">
             <tr>
               <th>#</th>
@@ -25,7 +25,11 @@
                 <td class="fw-bold"><%= category.name %></td>
                 <td class="text-center"><span class="badge bg-info text-dark"><%= category.respond_to?(:products) ? category.products.count : 0 %></span></td>
                 <td class="text-end">
-                  <%= button_to "ลบ", admin_category_path(category), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger", form_class: "d-inline-block" %>
+                    <div class="d-flex justify-content-end align-items-center gap-1">
+                      <%= link_to "Edit", edit_admin_category_path(category), class: "btn btn-sm btn-outline-primary me-1" %>
+                      <%#= link_to "Edit", edit_admin_category_path(category), class: "btn btn-sm btn-outline-primary me-1" %>
+                      <%= button_to "Delete", admin_category_path(category), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger", form_class: "d-inline-block" %>
+                    </div>
                 </td>
               </tr>
             <% end %>

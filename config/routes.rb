@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     root to: "dashboard#index"
 
     resources :products
-    resources :categories, only: [ :index, :new, :create, :destroy ]
+    resources :categories # only: [ :index, :new, :create, :destroy ]
     resources :reservations, only: [ :index, :show, :update, :destroy ]
     resources :orders, only: [ :index, :update, :show ]
     resources :options do
