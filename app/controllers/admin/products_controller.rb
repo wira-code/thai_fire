@@ -47,7 +47,7 @@ module Admin
         :description,
         :price_cents,
         :image_url,
-        :category,
+        :category_id,
         :ingredients,
         :featured,
         :bestseller,

@@ -57,9 +57,15 @@
 
     <%= yield %>
 
+    <%# ซ่อน Mini Cart หากอยู่ในฝั่ง admin, Devise หรือหน้า Contact %>
+    <% is_admin_page = controller_path.start_with?('admin/') %>
+    <% is_admin_user = current_user&.admin? %>
+    <% is_devise_page = respond_to?(:devise_controller?) && devise_controller? %>
+    <% is_contact_page = (controller_name == 'pages' && action_name == 'contact') || request.path == '/contact' %>
+
     <%# แปะ Mini Cart ไว้ล่างสุดของ Layout %>
     <%# แสดง Mini Cart เฉพาะหน้าที่ไม่ได้อยู่ใน admin namespace %>
-    <% unless controller_path.start_with?('admin/') %>
+    <% unless is_admin_page ||is_admin_user || is_devise_page || is_contact_page %>
       <%= render 'shared/mini_cart' %>
     <% end %>
   </body>

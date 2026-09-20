@@ -40,4 +40,15 @@ class ApplicationController < ActionController::Base
     # อนุญาตฟิลด์เพิ่มเติมตอน Edit Account (แก้ไขข้อมูลส่วนตัว)
     devise_parameter_sanitizer.permit(:account_update, keys: [ :first_name, :last_name, :phone ])
   end
+
+  private
+
+  # Redirect หลังเข้าสู่ระบบตาม Role
+  def after_sign_in_path_for(resource)
+    if resource.admin?
+      admin_products_path # หรือ admin_dashboard_path
+    else
+      root_path # สำหรับลูกค้าทั่วไป
+    end
+  end
 end

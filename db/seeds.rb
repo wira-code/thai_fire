@@ -286,4 +286,25 @@ ProductAddOn.create!([
   { product: khao_pad, add_on: out_of_stock_addon, position: 5 }
 ])
 
+# สร้าง หรือ ค้นหา Admin User เพื่อไม่ให้เกิดข้อมูลซ้ำเวลาสั่ง rails db:seed หลายรอบ
+admin = User.find_or_initialize_by(email: 'admin@thaifire.com')
+
+admin.assign_attributes(
+  first_name: 'Admin',
+  last_name: 'ThaiFire',
+  password: '112233',
+  password_confirmation: '112233',
+  role: "admin" # admin: true  ตามโครงสร้างที่คุณตั้งไว้ใน User model
+)
+
+if admin.save
+  puts "✅ Admin user created successfully!"
+  puts "📧 Email: admin@thaifire.com"
+  puts "🔑 Password: 112233"
+  puts "👤 Role: #{admin.role}"
+else
+  puts "❌ Failed to create admin user:"
+  puts admin.errors.full_messages.join(", ")
+end
+
 puts "Successfully created #{Category.count} category #{Product.count} products #{ProductOption.count} productoption #{ProductAddOn.count} productaddon #{Option.count} option #{OptionChoice.count} optionchoice!"

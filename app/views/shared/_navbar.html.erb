@@ -28,19 +28,21 @@
           <%= link_to "CONTACT", contact_path, class: "nav-link px-3 fw-bold text-dark #{'active' if current_page?(contact_path)}" %>
         </li>
         <li class="nav-item">
-          <%= link_to "DASHBOARD", admin_dashboard_path, class: "nav-link px-3 fw-bold text-dark #{'active' if current_page?(admin_dashboard_path)}" %>
+          <%# if current_user&.admin? %>
+            <%#= link_to "DASHBOARD", admin_dashboard_path, class: "nav-link px-3 fw-bold text-dark #{'active' if current_page?(admin_dashboard_path)}" %>
+          <%# end %>
         </li>
       </ul>
 
       <!-- 3. ปุ่มขวาสุด (ปุ่ม RESERVE ขอบมนสีแดง) -->
       <div class="d-flex align-items-center gap-2">
         <!-- ปุ่ม Action ขวาสุดตามภาพที่ 2 -->
-        <%= link_to reserve_path, class: "btn btn-outline-danger fw-bold rounded-pill px-3 py-2 ms-2", style: "color: #b81c24; border-color: #b81c24;" do %>
+        <%= link_to reserve_path, class: "btn btn-outline-danger fw-bold rounded-pill px-3 py-2 ms-2 d-flex align-items-center text-nowrap", style: "color: #b81c24; border-color: #b81c24;" do %>
           📅 RESERVE
         <% end %>
 
         <!-- ปุ่ม ตะกร้าสินค้า -->
-<%= link_to cart_path, class: "btn btn-outline-danger rounded-pill" do %>
+<%= link_to cart_path, class: "btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center text-nowrap position-relative" do %>
   🛒 ตะกร้า <span class="badge bg-danger"><%= current_cart.cart_items.sum(:quantity) %></span>
 <% end %>
 <!--
@@ -51,9 +53,9 @@
 
         <!-- เช็กการ Sign in ของ Devise -->
         <% if user_signed_in? %>
-          <%= link_to "ออกจากระบบ", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-link text-muted text-decoration-none btn-sm" %>
+          <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "tn btn-sm btn-link text-secondary text-decoration-none text-nowrap ms-2" %>
         <% else %>
-          <%= link_to "Log in", new_user_session_path, class: "btn btn-link text-muted text-decoration-none fw-bold text-dark btn-sm" %>
+          <%= link_to "Log in", new_user_session_path, class: "btn btn-link text-muted text-decoration-none fw-bold text-dark btn-sm text-nowrap" %>
         <% end %>
       </div>
     </div>

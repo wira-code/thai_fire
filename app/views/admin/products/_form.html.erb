@@ -32,7 +32,7 @@
   <div class="row">
     <div class="col-md-6 mb-3">
       <div class="d-flex justify-content-between align-items-center mb-1">
-        <%= f.label :category, "Category", class: "form-label fw-bold" %>
+        <%= f.label :category_id, "Category", class: "form-label fw-bold" %>
         <%= link_to "+ New Category", admin_categories_path, target: "_blank", class: "small text-danger text-decoration-none" %>
       </div>
       <%= f.collection_select :category_id, Category.all, :id, :name, { prompt: "Select Category" }, { class: "form-select rounded-3", required: true } %>

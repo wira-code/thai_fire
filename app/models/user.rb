@@ -6,14 +6,15 @@ class User < ApplicationRecord
 
   has_many :addresses, dependent: :destroy
   has_many :orders, dependent: :nullify
-  has_many :reservations
+  has_many :reservations, dependent: :destroy
+  has_one :cart, dependent: :destroy
 
     enum :role, {
       customer: 0,
       admin: 1,
       kitchen: 2,
       driver: 3
-    }, validate: true
+    }, default: :customer, validate: true
 
   validates :first_name, presence: true
   validates :last_name, presence: true
