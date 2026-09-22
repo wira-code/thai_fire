@@ -11,34 +11,87 @@
 /* ใส่ใน app/assets/stylesheets/application.css หรือคัสตอม CSS */
 @import "bootstrap";
 
-body {
-  background-color: #F4F4F2;
+/* 1. ประกาศตัวแปรสีหลัก (Dark Elegance Palette) */
+:root {
+  --bg-main: #121212;          /* พื้นหลังเว็บโทนดำเข้ม */
+  --bg-card: #1e1e1e;          /* การ์ดเมนูอาหารโทนเทาเข้ม */
+  --bg-navbar: #0a0a0a;        /* เมนูบาร์ด้านบนดำสนิท */
+  --text-primary: #f5f5f7;     /* ตัวหนังสือหลักสีขาวนวล */
+  --text-muted: #a1a1a6;       /* ตัวหนังสือรอง/คำอธิบาย */
+  --border-color: #2e2e2e;     /* เส้นขอบการ์ดและเส้นแบ่ง */
+  --brand-red: #d32f2f;        /* สีแดงเพลิงสำหรับปุ่มเน้น */
+  --brand-gold: #ffb300;       /* สีส้มทองสำหรับราคาและไฮไลต์ */
 }
 
-/* เพิ่มให้ Card อาหารดูมีมิติ และลอยโดดเด่นขึ้นมาจากพื้นหลัง */
+/* 2. กำหนด Style สภาพแวดล้อมหลัก */
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.navbar {
+  background-color: var(--bg-navbar) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ปรับสีลิงก์บน Navbar ให้อ่านง่ายบนพื้นหลังดำ */
+.navbar .nav-link {
+  color: var(--text-muted) !important;
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  color: #ffffff !important;
+}
+
+/* 3. Card เมนูอาหาร พร้อมเอฟเฟกต์ลอยตัว (Hover Effect) */
 .card {
-  background-color: #FFFFFF;
-  border: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  /* ปรับเงาและเส้นขอบให้การ์ดลอยเด่นขึ้นบนพื้นดำ */
+  border-color: #444444;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(211, 47, 47, 0.15);
 }
 
-/* Styling สำหรับ Sidebar Cart */
+/* ปรับสีข้อความและราคาภายใน Card */
+.card .card-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.card .text-muted {
+  color: var(--text-muted) !important;
+}
+
+.price-text, .card .price {
+  color: var(--brand-gold);
+  font-weight: bold;
+}
+
+/* 4. Styling สำหรับ Sidebar Cart */
 .mini-cart-sidebar {
   position: fixed;
   top: 100px; /* ระยะห่างจาก Header ด้านบน */
   right: 20px; /* ระยะห่างจากขอบขวา */
   width: 320px;
-  background-color: #2b2b2b; /* สีพื้นหลังโทนเข้มแบบภาพที่ 2 */
+  background-color: #1e1e1e; /* ปรับให้เข้าชุดกับ Card */
   color: #ffffff;
-  border-radius: 8px;
-  z-index: 1050; /* ให้อยู่เหนือ Element อื่นๆ */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  z-index: 1050;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
 }
 
 .mini-cart-body::-webkit-scrollbar {
@@ -46,10 +99,21 @@ body {
 }
 
 .mini-cart-body::-webkit-scrollbar-thumb {
-  background: #555;
+  background: #444;
   border-radius: 4px;
 }
 
-html {
-  scrollbar-gutter: stable;
+.btn-orange {
+  background-color: #ff6b00 !important; /* สีส้มสดตามภาพ */
+  border-color: #ff6b00 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease;
+}
+
+.btn-orange:hover {
+  background-color: #e05e00 !important; /* สีส้มเข้มขึ้นเล็กน้อยเวลาชี้เมาส์ */
+  border-color: #e05e00 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px); /* ลอยขึ้นเล็กน้อย */
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4) !important;
 }
