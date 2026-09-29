@@ -29,7 +29,7 @@
             <p class="card-text text-muted flex-grow-1"><%= truncate(product.description, length: 80) %></p>
 
             <div class="d-flex justify-content-between align-items-center mt-3">
-              <span class="fw-bold fs-5 text-primary">
+              <span class="text-price fw-bold fs-5 text-primary">
                 €<%= sprintf('%.2f', product.price_cents / 100.0) %>
               </span>
               <%= link_to "Details", product_path(product), class: "btn btn-outline-primary btn-sm" %>

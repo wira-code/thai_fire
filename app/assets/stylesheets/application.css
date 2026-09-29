@@ -11,17 +11,53 @@
 /* ใส่ใน app/assets/stylesheets/application.css หรือคัสตอม CSS */
 @import "bootstrap";
 
+:root {
+  --bg-main: #121212;          /* พื้นหลังเว็บโทนดำเข้ม */
+  --bg-card: #1e1e1e;          /* การ์ดเมนูอาหารโทนเทาเข้ม */
+  --bg-navbar: #0a0a0a;        /* เมนูบาร์ด้านบนดำสนิท */
+  --text-primary: #f5f5f7;     /* ตัวหนังสือหลักสีขาวนวล */
+  --text-muted: #a1a1a6;       /* ตัวหนังสือรอง/คำอธิบาย */
+  --border-color: #2e2e2e;     /* เส้นขอบการ์ดและเส้นแบ่ง */
+  --brand-red: #d32f2f;        /* สีแดงเพลิงสำหรับปุ่มเน้น */
+  --brand-gold: #ffb300;       /* สีส้มทองสำหรับราคาและไฮไลต์ */
+}
+
 body {
-  background-color: #F4F4F2;
+  background-color: #121212 !important;
+  color: #f5f5f7 !important;
+}
+
+/* Navbar สีดำสนิท */
+.navbar {
+  background-color: #0a0a0a !important;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.navbar .nav-link {
+  color: #a1a1a6 !important;
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  color: #d3b9b9 !important;
+  font-weight: bold;
 }
 
 /* เพิ่มให้ Card อาหารดูมีมิติ และลอยโดดเด่นขึ้นมาจากพื้นหลัง */
+/* การ์ดเมนูอาหาร โทนเทาดำ */
 .card {
-  background-color: #FFFFFF;
-  border: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #1e1e1e !important;
+  border: 1px solid #2e2e2e !important;
+  color: #ffffff !important;
+  border-radius: 12px;
+  overflow: hidden;
 }
+
+.card-title {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
 
 .card:hover {
   transform: translateY(-4px);
@@ -50,6 +86,13 @@ body {
   border-radius: 4px;
 }
 
+/* 2. กำหนด Style สภาพแวดล้อมหลัก */
 html {
   scrollbar-gutter: stable;
+}
+
+
+.text-price, .price-tag {
+  color: #ffb300 !important; /* สีส้มทองอมแสด */
+  font-weight: bold;
 }
