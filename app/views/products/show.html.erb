@@ -1,21 +1,22 @@
 
-
-<div class="container my-5">
+<div class="container my-4">
   <%= link_to :back, class: "link-dark text-decoration-none text-secondary d-inline-flex align-items-center mb-3 fw-semibold" do %>
   <i class="fa-solid fa-arrow-left me-2"></i> <--- Back
   <% end %>
   <!--<%= link_to :back, class: "btn btn-outline-secondary mb-3 rounded-pill px-3" do %>
   <i class="fa-solid fa-arrow-left me-1"></i> <--- Back
   <% end %> -->
-  <div class="row">
+  <div class="row g-4 align-items-start">
     <div class="col-md-6">
-      <img src="<%= @product.image_url %>" class="img-fluid rounded-3 shadow" alt="<%= @product.name %>">
+      <div class="product-image-container overflow-hidden rounded-4 shadow">
+        <img src="<%= @product.image_url %>" class="img-fluid rounded-3 shadow" alt="<%= @product.name %>">
+      </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 ps-lg-4"">
       <h2><%= @product.name %></h2>
-      <h4 class="text-danger">€<%= sprintf('%.2f', @product.price_cents / 100.0) %></h4>
-      <p class="text-muted"><%= @product.description %></p>
+      <h4 class="price-text">€<%= sprintf('%.2f', @product.price_cents / 100.0) %></h4>
+      <p class="text-des text-muted"><%= @product.description %></p>
 
       <hr>
 
@@ -43,7 +44,7 @@
                 <%= label_tag "choice_#{choice.id}", class: "form-check-label d-flex justify-content-between" do %>
                   <span><%= choice.name %></span>
                   <% if choice.price_cents > 0 %>
-                    <span class="text-muted">+€<%= sprintf('%.2f', choice.price_cents / 100.0) %></span>
+                    <span class="price-text text-muted">+€<%= sprintf('%.2f', choice.price_cents / 100.0) %></span>
                   <% end %>
                 <% end %>
               </div>
@@ -53,8 +54,11 @@
 
         <!-- 2. ส่วนเลือก Add-ons (พร้อมเลือกจำนวนชิ้น + เช็กสถานะ available) -->
         <% if @product.add_ons.any? %>
-          <div class="mb-4">
-            <h5 class="fw-bold mb-3">Un supplément ?</h5>
+          <!-- กล่องตัวเลือกเสริม (Un supplément?) -->
+          <div class="card bg-dark text-white border-secondary mb-4 rounded-3 shadow-sm">
+            <div class="card-header bg-transparent border-secondary py-3">
+              <h5 class="fw-bold mb-3">An Extra ?</h5>
+            </div>
             <div class="list-group list-group-flush border-top border-bottom">
               <% @product.add_ons.each do |add_on| %>
                 <div class="list-group-item d-flex justify-content-between align-items-center py-3 px-0 <%= 'opacity-50' unless add_on.available? %>">

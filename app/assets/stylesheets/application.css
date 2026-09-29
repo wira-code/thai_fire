@@ -19,7 +19,7 @@
   --text-muted: #a1a1a6;       /* ตัวหนังสือรอง/คำอธิบาย */
   --border-color: #2e2e2e;     /* เส้นขอบการ์ดและเส้นแบ่ง */
   --brand-red: #d32f2f;        /* สีแดงเพลิงสำหรับปุ่มเน้น */
-  --brand-gold: #ffb300;       /* สีส้มทองสำหรับราคาและไฮไลต์ */
+  --brand-gold: #ff6b00;       /* สีส้มทองสำหรับราคาและไฮไลต์ */
 }
 
 body {
@@ -92,7 +92,27 @@ html {
 }
 
 
-.text-price, .price-tag {
-  color: #ffb300 !important; /* สีส้มทองอมแสด */
+.price-text, .product-price, .price {
+  color: #ff6b00 !important; /* โค้ดสีส้มเดียวกับปุ่ม */
   font-weight: bold;
+}
+
+.btn-orange {
+  background-color: #ff6b00 !important; /* สีส้มสดตามภาพ */
+  border-color: #ff6b00 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease;
+}
+
+.btn-orange:hover {
+  background-color: #e05e00 !important; /* สีส้มเข้มขึ้นเล็กน้อยเวลาชี้เมาส์ */
+  border-color: #e05e00 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px); /* ลอยขึ้นเล็กน้อย */
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4) !important;
+}
+
+
+.text-des {
+  color: #ffffff !important;
 }

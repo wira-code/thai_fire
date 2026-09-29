@@ -4,7 +4,7 @@
 
     <!-- 1. LOGO ทางซ้าย -->
     <%= link_to root_path, class: "navbar-brand d-flex align-items-center me-4 text-decoration-none" do %>
-    <%= image_tag "logo.jpeg", alt: "Thai Fire Logo", class: "img-fluid rounded-4 shadow-sm", style: "height: 70px; width: auto object-fit: cover;" %>
+    <%= image_tag "logo.jpeg", alt: "Thai Fire Logo", class: "img-fluid rounded-4 shadow-sm", style: "height: 80px; width: auto object-fit: cover;" %>
 
     <% end %>
 
@@ -15,7 +15,7 @@
 
     <!-- 2. เมนูตรงกลาง (สไตล์ภาพที่ 2) -->
     <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2 align-items-center text-nowrap">
+      <ul class="navbar-nav w-100 justify-content-between align-items-center mb-0 text-nowrap">
         <li class="nav-item">
           <%= link_to "HOME", root_path, class: "nav-link px-3 fw-bold text-white bg-danger rounded-0 #{'active' if current_page?(root_path)}", style: "background-color: #b81c24 !important;" %>
         </li>

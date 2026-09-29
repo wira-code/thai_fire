@@ -47,7 +47,7 @@ style="background: url('<%= image_path("background.jpg") %>') center/cover no-re
               <%= truncate(product.description, length: 80) %>
             </p>
             <div class="d-flex justify-content-between align-items-center mt-3">
-              <span class="fs-5 fw-bold text-danger">
+              <span class="price-text fs-5 fw-bold text-danger">
                 €<%= sprintf('%.2f', (product.respond_to?(:price_cents) ? product.price_cents / 100.0 : product.price)) %>
               </span>
               <%= link_to "Details", product_path(product), class: "btn btn-outline-dark btn-sm rounded-pill px-3" %>
@@ -82,7 +82,7 @@ style="background: url('<%= image_path("background.jpg") %>') center/cover no-re
               <%= truncate(product.description, length: 80) %>
             </p>
             <div class="d-flex justify-content-between align-items-center mt-3">
-              <span class="fs-5 fw-bold text-danger">
+              <span class="price-text fs-5 fw-bold text-danger">
                 €<%= sprintf('%.2f', (product.respond_to?(:price_cents) ? product.price_cents / 100.0 : product.price)) %>
               </span>
               <%= link_to "Details", product_path(product), class: "btn btn-outline-dark btn-sm rounded-pill px-3" %>
