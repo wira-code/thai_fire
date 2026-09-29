@@ -36,4 +36,5 @@ Rails.application.routes.draw do
       patch :upload_slip
     end
   end
+  resources :reservations, path: "reserve", as: :reserve
 end
