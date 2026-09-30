@@ -28,7 +28,7 @@
                 total_cents += item_total_cents
               %>
 
-              <div class="list-group-item py-3 px-0 border-bottom">
+              <div class="list-group-item py-2 px-0 border-bottom">
                 <div class="d-flex justify-content-between align-items-start">
                   <div>
                     <h5 class="fw-bold mb-1 ms-2"><%= item.product.name %></h5>
@@ -37,7 +37,7 @@
                     <% if item.cart_item_options.any? %>
                       <div class="small text-muted mb-1">
                         <% item.cart_item_options.each do |opt| %>
-                          <span class="badge bg-light text-dark border ms-2 me-1">
+                          <span class="badge bg-warning text-dark border ms-2 me-1">
                             <%= opt.option_name %>: <%= opt.choice_name %>
                             <% if opt.price_cents > 0 %> (+€<%= sprintf('%.2f', opt.price_cents / 100.0) %>)<% end %>
                           </span>
@@ -47,7 +47,7 @@
 
                     <!-- แสดง Add-ons ที่เลือก -->
                     <% if item.cart_item_add_ons.any? %>
-                      <div class="small text-muted mb-1">
+                      <div class="small text-muted mb-1 ms-2">
                         <strong>Topping:</strong>
                         <% item.cart_item_add_ons.each do |add_on| %>
                           <span class="badge bg-warning text-dark me-1">
@@ -97,15 +97,16 @@
           <h4 class="fw-bold mb-3">สรุปคำสั่งซื้อ</h4>
           <hr>
           <div class="d-flex justify-content-between mb-2">
+            <span>Total item</span>
             <span class="text-muted">Total item</span>
             <span class="fw-bold"><%= @cart_items.sum(:quantity) %> pcs</span>
           </div>
           <div class="d-flex justify-content-between mb-4 fs-4 fw-bold">
-            <span>Total price</span>
-            <span class="text-danger">€<%= sprintf('%.2f', total_cents / 100.0) %></span>
+            <span>Total Price</span>
+            <span class="price-text">€<%= sprintf('%.2f', total_cents / 100.0) %></span>
           </div>
 
-          <%= link_to "ดำเนินการสั่งซื้อ (Checkout)", new_order_path, class: "btn btn-danger btn-lg rounded-pill w-100 fw-bold" %>
+          <%= link_to "Checkout", new_order_path, class: "btn btn-orange btn-lg rounded-4 w-50 fw-bold" %>
         </div>
       </div>
     </div>
