@@ -1,5 +1,6 @@
 class CartItemOption < ApplicationRecord
   belongs_to :cart_item
+  belongs_to :option_choice
 
   validates :option_name, presence: true
   validates :choice_name, presence: true

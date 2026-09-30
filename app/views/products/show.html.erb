@@ -6,14 +6,14 @@
   <!--<%= link_to :back, class: "btn btn-outline-secondary mb-3 rounded-pill px-3" do %>
   <i class="fa-solid fa-arrow-left me-1"></i> <--- Back
   <% end %> -->
-  <div class="row g-4 align-items-start">
-    <div class="col-md-6">
+  <div class="row g-4 align-items-start gap-3">
+    <div class="col-md-5">
       <div class="product-image-container overflow-hidden rounded-4 shadow">
         <img src="<%= @product.image_url %>" class="img-fluid rounded-3 shadow" alt="<%= @product.name %>">
       </div>
     </div>
 
-    <div class="col-md-6 ps-lg-4"">
+    <div class="col-md-5 ps-lg-4">
       <h2><%= @product.name %></h2>
       <h4 class="price-text">€<%= sprintf('%.2f', @product.price_cents / 100.0) %></h4>
       <p class="text-des text-muted"><%= @product.description %></p>
@@ -63,14 +63,14 @@
               <% @product.add_ons.each do |add_on| %>
                 <div class="list-group-item d-flex justify-content-between align-items-center py-3 px-0 <%= 'opacity-50' unless add_on.available? %>">
                   <div>
-                    <div class="fw-bold text-dark"><%= add_on.name %></div>
-                    <div class="small text-muted">+<%= sprintf('%.2f', add_on.price_cents / 100.0) %> €</div>
+                    <div class="fw-bold text-dark ms-2 me-2"><%= add_on.name %></div>
+                    <div class="small text-muted  ms-2 me-2">+<%= sprintf('%.2f', add_on.price_cents / 100.0) %> €</div>
                   </div>
 
                   <div>
                     <% if add_on.available? %>
                       <!-- ตัวเลือกจำนวน Add-on (เริ่มต้นเป็น 0) -->
-                      <div class="d-flex align-items-center gap-2">
+                      <div class="d-flex align-items-center gap-2 me-2">
                         <%= number_field_tag "add_ons[#{add_on.id}]", 0, min: 0, max: 10, class: "form-control text-center", style: "width: 70px;" %>
                       </div>
                     <% else %>
@@ -86,13 +86,13 @@
 
         <!-- 3. คำสั่งพิเศษเพิ่มเติม (Special Request) -->
         <div class="mb-3">
-          <%= f.label :special_request, "หมายเหตุเพิ่มเติมถึงห้องครัว", class: "form-label fw-bold" %>
-          <%= f.text_area :special_request, class: "form-control", rows: 2, placeholder: "เช่น ไม่ใส่ผักชี, ขอซอสเพิ่ม" %>
+          <%= f.label :special_request, "Special request:", class: "form-label fw-bold" %>
+          <%= f.text_area :special_request, class: "form-control", rows: 2, placeholder: "ex.more chili powder" %>
         </div>
 
         <div class="d-flex gap-3 align-items-center mt-4">
           <%= f.number_field :quantity, value: 1, min: 1, class: "form-control w-25" %>
-          <%= f.submit "Add to cart", class: "btn btn-primary btn-lg flex-grow-1" %>
+          <%= f.submit "Add to cart", class: "btn btn-orange btn-lg flex-grow-1" %>
         </div>
       <% end %>
     </div>

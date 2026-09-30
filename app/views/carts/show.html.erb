@@ -1,21 +1,21 @@
-<div class="container my-5">
+<div class="container my-4">
   <!-- ปุ่มย้อนกลับ -->
   <%= link_to :back, class: "text-decoration-none text-secondary d-inline-flex align-items-center mb-4 fw-semibold" do %>
-    <i class="fa-solid fa-arrow-left me-2"></i> สั่งอาหารเพิ่ม
+    <i class="fa-solid fa-arrow-left me-2"></i> Choose more menu
   <% end %>
 
-  <h2 class="fw-bold mb-4"><i class="fa-solid fa-basket-shopping me-2 text-danger"></i> ตะกร้าสินค้าของคุณ</h2>
+  <h2 class="fw-bold mb-4"><i class="fa-solid fa-basket-shopping me-2 text-danger"></i> Your Cart</h2>
 
   <% if @cart_items.empty? %>
     <div class="text-center py-5 shadow-sm rounded-4 bg-light">
-      <h4 class="text-muted mb-3">ไม่มีรายการอาหารในตะกร้า</h4>
-      <%= link_to "เลือกเมนูอาหาร", root_path, class: "btn btn-danger rounded-pill px-4" %>
+      <h4 class="text-muted mb-3">Has no item in the cart</h4>
+      <%= link_to "See menu", root_path, class: "btn btn-danger rounded-pill px-4" %>
     </div>
   <% else %>
-    <div class="row g-4">
+    <div class="row g-4 gap-3">
       <!-- รายการสินค้า -->
-      <div class="col-lg-8">
-        <div class="card border-0 shadow-sm rounded-4 p-3">
+      <div class="col-lg-6">
+        <div class="card bg-white rounded-3 shadow-sm p-2 p-md-2">
           <div class="list-group list-group-flush">
             <% total_cents = 0 %>
             <% @cart_items.each do |item| %>
@@ -31,13 +31,13 @@
               <div class="list-group-item py-3 px-0 border-bottom">
                 <div class="d-flex justify-content-between align-items-start">
                   <div>
-                    <h5 class="fw-bold mb-1"><%= item.product.name %></h5>
+                    <h5 class="fw-bold mb-1 ms-2"><%= item.product.name %></h5>
 
                     <!-- แสดง Options ที่เลือก -->
                     <% if item.cart_item_options.any? %>
                       <div class="small text-muted mb-1">
                         <% item.cart_item_options.each do |opt| %>
-                          <span class="badge bg-light text-dark border me-1">
+                          <span class="badge bg-light text-dark border ms-2 me-1">
                             <%= opt.option_name %>: <%= opt.choice_name %>
                             <% if opt.price_cents > 0 %> (+€<%= sprintf('%.2f', opt.price_cents / 100.0) %>)<% end %>
                           </span>
@@ -48,7 +48,7 @@
                     <!-- แสดง Add-ons ที่เลือก -->
                     <% if item.cart_item_add_ons.any? %>
                       <div class="small text-muted mb-1">
-                        <strong>ท็อปปิ้ง:</strong>
+                        <strong>Topping:</strong>
                         <% item.cart_item_add_ons.each do |add_on| %>
                           <span class="badge bg-warning text-dark me-1">
                             + <%= add_on.add_on_name %> x<%= add_on.quantity %> (+€<%= sprintf('%.2f', (add_on.price_cents * add_on.quantity) / 100.0) %>)
@@ -67,22 +67,22 @@
 
                   <!-- ราคารวมของรายการนี้ -->
                   <div class="text-end">
-                    <div class="fw-bold fs-5 text-danger">€<%= sprintf('%.2f', item_total_cents / 100.0) %></div>
-                    <div class="small text-muted">€<%= sprintf('%.2f', unit_price_cents / 100.0) %> / ชิ้น</div>
+                    <div class="fw-bold fs-5 price-text me-2">€<%= sprintf('%.2f', item_total_cents / 100.0) %></div>
+                    <div class="small text-muted me-2">€<%= sprintf('%.2f', unit_price_cents / 100.0) %> / pcs</div>
                   </div>
                 </div>
 
                 <!-- ปรับจำนวน & ปุ่มลบ -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="d-flex justify-content-between align-items-center mt-3 ms-2">
                   <div class="d-flex align-items-center gap-2">
                     <%= form_with url: cart_item_path(item), method: :patch, local: true, class: "d-flex gap-2 align-items-center" do |f| %>
                       <%= f.number_field :quantity, value: item.quantity, min: 1, class: "form-control form-control-sm text-center", style: "width: 70px;" %>
-                      <%= f.submit "อัปเดต", class: "btn btn-outline-secondary btn-sm" %>
+                      <%= f.submit "Update", class: "btn btn-outline-secondary btn-sm" %>
                     <% end %>
                   </div>
 
-                  <%= button_to cart_item_path(item), method: :delete, class: "btn btn-link text-danger p-0 text-decoration-none small", data: { turbo_confirm: "ต้องการลบรายการนี้ใช่หรือไม่?" } do %>
-                    <i class="fa-regular fa-trash-can me-1"></i> ลบรายการ
+                  <%= button_to cart_item_path(item), method: :delete, class: "btn btn-outline-danger p-0 text-decoration-none small me-2", data: { turbo_confirm: "Are you sure?" } do %>
+                    <i class="fa-regular fa-trash-can me-1"></i> Delete
                   <% end %>
                 </div>
               </div>
@@ -97,11 +97,11 @@
           <h4 class="fw-bold mb-3">สรุปคำสั่งซื้อ</h4>
           <hr>
           <div class="d-flex justify-content-between mb-2">
-            <span class="text-muted">จำนวนรายการ</span>
-            <span class="fw-bold"><%= @cart_items.sum(:quantity) %> ชิ้น</span>
+            <span class="text-muted">Total item</span>
+            <span class="fw-bold"><%= @cart_items.sum(:quantity) %> pcs</span>
           </div>
           <div class="d-flex justify-content-between mb-4 fs-4 fw-bold">
-            <span>ราคารวมทั้งหมด</span>
+            <span>Total price</span>
             <span class="text-danger">€<%= sprintf('%.2f', total_cents / 100.0) %></span>
           </div>
 
