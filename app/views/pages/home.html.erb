@@ -14,20 +14,11 @@ style="background: url('<%= image_path("background.jpg") %>') center/cover no-re
 </div>
 
 <div class="container my-5">
-  <!-- 2. หมวดหมู่อาหาร (Quick Category Navigation) -->
-  <!-- <div class="text-center mb-5">
-    <h3 class="fw-bold mb-3">หมวดหมู่อาหาร</h3>
-    <div class="d-flex justify-content-center gap-2 flex-wrap">
-      <% @categories.each do |category| %>
-        <%= link_to category.name, category_path(category), class: "btn btn-outline-dark rounded-pill px-3" %>
-      <% end %>
-    </div>
-  </div> -->
-
   <!-- Section 1: เมนูแนะนำ (Featured) -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="fw-bold m-0">🔥 Recomended</h1>
-    <%= link_to "ดูทั้งหมด →", products_path, class: "text-decoration-none fw-bold text-danger" %>
+    <%= link_to "All Recommended", products_path(featured: true),
+      class: "btn #{params[:featured] == 'true' ? 'btn-orange-active' : 'btn-orange-outline'}" %>
   </div>
   <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
     <% @featured_products.each do |product| %>
@@ -50,7 +41,7 @@ style="background: url('<%= image_path("background.jpg") %>') center/cover no-re
               <span class="price-text fs-5 fw-bold text-danger">
                 €<%= sprintf('%.2f', (product.respond_to?(:price_cents) ? product.price_cents / 100.0 : product.price)) %>
               </span>
-              <%= link_to "Details", product_path(product), class: "btn btn-outline-dark btn-sm rounded-pill px-3" %>
+              <%= link_to "Details", product_path(product), class: "btn btn-orange-outline btn-sm rounded-3 px-3 stretched-link" %>
             </div>
           </div>
         </div>
@@ -62,7 +53,8 @@ style="background: url('<%= image_path("background.jpg") %>') center/cover no-re
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="fw-bold m-0">🔥 Best Seller</h1>
-    <%= link_to "ดูทั้งหมด →", products_path, class: "text-decoration-none fw-bold text-danger" %>
+    <%= link_to "All Best seller", products_path(bestseller: true),
+      class: "btn #{params[:bestseller] == 'true' ? 'btn-orange-active' : 'btn-orange-outline'}" %>
   </div>
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <% @bestseller_products.each do |product| %>
@@ -85,7 +77,7 @@ style="background: url('<%= image_path("background.jpg") %>') center/cover no-re
               <span class="price-text fs-5 fw-bold text-danger">
                 €<%= sprintf('%.2f', (product.respond_to?(:price_cents) ? product.price_cents / 100.0 : product.price)) %>
               </span>
-              <%= link_to "Details", product_path(product), class: "btn btn-outline-dark btn-sm rounded-pill px-3" %>
+              <%= link_to "Details", product_path(product), class: "btn btn-orange-outline btn-sm rounded-3 px-3 stretched-link" %>
             </div>
           </div>
         </div>

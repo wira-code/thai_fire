@@ -11,6 +11,16 @@ class ProductsController < ApplicationController
     if params[:category_id].present?
       @products = @products.where(category_id: params[:category_id])
     end
+
+    # กรองเฉพาะรายการแนะนำ เมื่อกด "ดูทั้งหมด"[cite: 13]
+    if params[:featured] == "true"
+      @products = @products.where(featured: true) # หรือสโคปตามที่มีใน Model เช่น .recommended
+    end
+
+    # กรองเฉพาะรายการแนะนำ เมื่อกด "ดูทั้งหมด"[cite: 13]
+    if params[:bestseller] == "true"
+      @products = @products.where(bestseller: true) # หรือสโคปตามที่มีใน Model เช่น .recommended
+    end
   end
 
   def show
