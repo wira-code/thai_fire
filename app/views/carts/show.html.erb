@@ -1,8 +1,9 @@
 <div class="container my-4">
   <!-- ปุ่มย้อนกลับ -->
-  <%= link_to :back, class: "text-decoration-none text-secondary d-inline-flex align-items-center mb-4 fw-semibold" do %>
-    <i class="fa-solid fa-arrow-left me-2"></i> Choose more menu
+  <%= link_to products_path, class: "text-decoration-none text-secondary d-inline-flex align-items-center mb-3" do %>
+  <i class="fa-solid fa-arrow-left me-2"></i> Choose more menu
   <% end %>
+  <%#= link_to "Choose more menu", products_path, class: "text-decoration-none text-secondary d-inline-flex align-items-center mb-3" %>
 
   <h2 class="fw-bold mb-4"><i class="fa-solid fa-basket-shopping me-2 text-danger"></i> Your Cart</h2>
 
@@ -32,7 +33,7 @@
                 <div class="d-flex justify-content-between align-items-start">
                   <div>
                     <h5 class="fw-bold mb-1 ms-2"><%= item.product.name %></h5>
-
+                    <div class="d-flex">
                     <!-- แสดง Options ที่เลือก -->
                     <% if item.cart_item_options.any? %>
                       <div class="small text-muted mb-1">
@@ -63,12 +64,13 @@
                         <i class="fa-regular fa-comment-dots me-1"></i><%= item.special_request %>
                       </div>
                     <% end %>
+                    </div>
                   </div>
 
                   <!-- ราคารวมของรายการนี้ -->
                   <div class="text-end">
                     <div class="fw-bold fs-5 price-text me-2">€<%= sprintf('%.2f', item_total_cents / 100.0) %></div>
-                    <div class="small text-muted me-2">€<%= sprintf('%.2f', unit_price_cents / 100.0) %> / pcs</div>
+                    <!--<div class="small text-muted me-2">€<%= sprintf('%.2f', unit_price_cents / 100.0) %> / pcs</div>-->
                   </div>
                 </div>
 
@@ -99,14 +101,15 @@
           <div class="d-flex justify-content-between mb-2">
             <span>Total item</span>
             <span class="text-muted">Total item</span>
-            <span class="fw-bold"><%= @cart_items.sum(:quantity) %> pcs</span>
+            <!--<span class="fw-bold"><%= @cart_items.sum(:quantity) %> pcs</span>-->
+            <span class="fw-bold"><%= @cart_items.sum(&:quantity) %> pcs</span>
           </div>
           <div class="d-flex justify-content-between mb-4 fs-4 fw-bold">
             <span>Total Price</span>
             <span class="price-text">€<%= sprintf('%.2f', total_cents / 100.0) %></span>
           </div>
 
-          <%= link_to "Checkout", new_order_path, class: "btn btn-orange btn-lg rounded-4 w-50 fw-bold" %>
+          <%= link_to "CHECKOUT", new_order_path, class: "btn btn-orange btn-lg rounded-4 w-50 fw-bold" %>
         </div>
       </div>
     </div>

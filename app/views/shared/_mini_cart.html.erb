@@ -1,7 +1,6 @@
-
 <div id="sidebar-cart" class="mini-cart-sidebar shadow-lg">
-  <div class="mini-cart-header p-3 text-center border-bottom bg-dark text-white fw-bold">
-   Your Cart
+  <div class="mini-cart-header p-3 text-center border-bottom bg-dark text-white fw-bold fs-3">
+    🛒 Your Cart
   </div>
 
   <div class="mini-cart-body p-2 overflow-auto" style="max-height: 400px;">
@@ -10,7 +9,7 @@
         <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom text-white gap-2">
           <div class="d-flex align-items-center gap-2">
 
-          <!-- ปุ่มปรับจำนวน -->
+            <!-- ปุ่มปรับจำนวน -->
             <div class="d-flex align-items-center bg-secondary rounded p-1 gap-1">
               <%= button_to decrease_cart_item_path(item), method: :post, class: "btn btn-sm btn-outline-light p-0 px-1 border-0 fw-bold", style: "line-height: 1;" do %>
                 -
@@ -21,70 +20,79 @@
               <% end %>
             </div>
 
-          <!-- รูปสินค้า -->
+            <!-- รูปสินค้า -->
             <% if item.product.image_url.present? %>
               <%= image_tag item.product.image_url, class: "rounded", style: "width: 45px; height: 45px; object-fit: cover;" %>
             <% else %>
               <div class="bg-secondary rounded d-flex align-items-center justify-content-center text-white" style="width: 45px; height: 45px;">📷</div>
             <% end %>
 
-          <!-- ชื่อสินค้า + รายละเอียด Options / Add-ons -->
+            <!-- ชื่อสินค้า + รายละเอียด Options / Add-ons -->
             <div class="flex-grow-1 overflow-hidden">
-              <div class="fw-semibold text-truncate text-white" style="max-width: 120px;"><%= item.product.name %>
-              </div>
+              <div class="fw-semibold text-truncate text-white" style="max-width: 120px;"><%= item.product.name %></div>
 
-            <!-- แสดง Badges ตัวเลือกย่อย (Options / Add-ons) -->
+              <!-- แสดง Badges ตัวเลือกย่อย (แยก 2 ลูปขนานกัน) -->
               <div class="d-flex flex-wrap gap-1 mt-1">
+                <%# 1. ลูป Options %>
                 <% item.cart_item_options.each do |option| %>
-                  <span class="badge bg-secondary text-white" style="font-size: 0.65rem;">
-                    <%= option.choice_name %>
-                    <% if option.price_cents.present? && option.price_cents > 0 %>
-                      (+<%= number_to_currency(option.price_cents / 100.0, unit: '€') %>)
-                    <% end %>
-                  </span>
-                 <!-- <% if option.option_choice.present? %>
-                    <span class="badge bg-secondary text-white" style="font-size: 0.65rem;">
-                      <%= option.choice.name %>
-                      <%= "(+#{number_to_currency(option.price_cents/ 100.0, unit: '€')})" if option.price_cents > 0 %>
-                    </span>
-                  <% end %>-->
+                  <% opt_name = option.try(:choice_name) || option.try(:name) || option.try(:option_choice)&.try(:name) %>
+                  <% opt_price = option.try(:price_cents) || option.try(:price) || 0 %>
 
-                  <% item.cart_item_add_ons.each do |add_on| %>
+                  <% if opt_name.present? %>
                     <span class="badge bg-warning text-dark" style="font-size: 0.65rem;">
-                      + <%= add_on.name %>
-                      <% if add_on.price_cents.present? && add_on.price_cents > 0 %>
-                        (+<%= number_to_currency(add_on.price_cents / 100.0, unit: '€') %>)
+                      <%= opt_name %>
+                      <% if opt_price > 0 %>
+                        (+<%= number_to_currency(opt_price / 100.0, unit: '€') %>)
                       <% end %>
                     </span>
-                    <!--<span class="badge bg-warning text-dark" style="font-size: 0.65rem;">
-                      + <%= cart_add_on.add_on.name %> <%= "(+#{number_to_currency(cart_add_on.add_on.price, unit: '€')})" if cart_add_on.add_on.price.to_f > 0 %>
-                    </span>-->
+                  <% end %>
+                <% end %>
+
+                <%# 2. ลูป Add-ons (แยกออกมาอยู่นอกลูป options) %>
+                <% item.cart_item_add_ons.each do |add_on| %>
+                  <% addon_name = add_on.try(:name) || add_on.try(:add_on_name) || add_on.try(:add_on)&.try(:name) %>
+                  <% addon_price = add_on.try(:price_cents) || add_on.try(:price) || 0 %>
+
+                  <% if addon_name.present? %>
+                    <span class="badge bg-warning text-dark" style="font-size: 0.65rem;">
+                      + <%= addon_name %>
+                      <% if addon_price > 0 %>
+                        (+<%= number_to_currency(addon_price / 100.0, unit: '€') %>)
+                      <% end %>
+                    </span>
                   <% end %>
                 <% end %>
               </div>
             </div>
           </div>
 
-        <!-- ราคารวมของรายการนี้ (ใช้ item.total_price) -->
+          <!-- ราคารวมของรายการนี้ (คำนวณผ่าน method total_price หรือ unit_price_cents) -->
           <div class="fw-bold text-end text-white">
-            €<%= number_with_precision((item.product.price_cents * item.quantity) / 100.0, precision: 2) %>
+            <% if item.respond_to?(:total_price) %>
+              €<%= number_with_precision(item.total_price, precision: 2) %>
+            <% else %>
+              €<%= number_with_precision((item.unit_price_cents * item.quantity) / 100.0, precision: 2) %>
+            <% end %>
           </div>
         </div>
       <% end %>
     <% else %>
-      <div class="text-center text-muted py-4">Has no item in cart
-      </div>
+      <div class="text-center text-muted py-4">Has no item in cart</div>
     <% end %>
   </div>
 
-<!-- ยอดราคารวมสุทธิท้ายตะกร้าลอย (Total) -->
+  <!-- ยอดราคารวมสุทธิท้ายตะกร้าลอย (Total) -->
   <div class="mini-cart-footer p-3 border-top bg-dark text-white">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <span class="fs-5">Total</span>
-      <span class="fs-4 fw-bold text-warning">
-        <%= number_to_currency(current_cart.cart_items.sum(&:total_cents), unit: "€") %>
+      <span class="fs-4">Total</span>
+      <span class="fs-4 fw-bold price-text">
+        <% if @cart.respond_to?(:total_price) %>
+          <%= number_to_currency(@cart.total_price, unit: "€") %>
+        <% else %>
+          <%= number_to_currency(current_cart.cart_items.sum(&:unit_price_cents) / 100.0, unit: "€") %>
+        <% end %>
       </span>
     </div>
-    <%= link_to "COMMANDER", new_order_path, class: "btn btn-warning w-100 fw-bold py-2 text-dark text-uppercase" %>
+    <%= link_to "COMMANDER", new_order_path, class: "btn btn-orange w-100 fw-bold py-2 text-dark text-uppercase" %>
   </div>
 </div>
